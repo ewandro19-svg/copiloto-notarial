@@ -1,0 +1,227 @@
+{
+  "modelos": {
+    "compra_e_venda_a_vista": {
+      "nome": "Compra e Venda à Vista",
+      "itens": {
+        "cabecalho": {
+          "nome": "Cabeçalho da escritura",
+          "texto_padrao": "**ESCRITURA PÚBLICA DE VENDA E COMPRA**\n\nESCRITURA PÚBLICA DE VENDA E COMPRA que «faz:1»: {{#outorgantes}}{{nome}}{{/outorgantes}}{{conjuge_outorgante_texto}} à {{#outorgados}}{{nome}}{{/outorgados}}, na forma abaixo declarada:\n\nSaibam quantos esta ESCRITURA PÚBLICA DE VENDA E COMPRA, lançada nesta data, pelo número {{ordem_lavratura}} no \"Livro Protocolo Geral\", bastante virem que, {{data_lavratura}}, neste 8º Tabelionato de Notas, nesta Cidade de Curitiba, Capital do Estado do Paraná, perante mim, Léia Fernanda de Souza Ritti Ricci, Tabeliã de Notas, e pelo(a) Escrevente autorizado(a), compareceram partes entre si previamente acordadas, justas e contratadas, a saber: de um lado, como"
+        },
+        "item_1_outorgante": {
+          "nome": "Item 1 — Outorgante Vendedor",
+          "texto_padrao": "**1-«OUTORGANTE:1» «VENDEDOR:1»:** {{#outorgantes}}{{texto_qualificacao}}{{/outorgantes}};"
+        },
+        "item_2_outorgado": {
+          "nome": "Item 2 — Outorgado Comprador",
+          "texto_padrao": "E, de outro lado, como\n**2-«OUTORGADO:2» «COMPRADOR:2»:** {{#outorgados}}{{texto_qualificacao}}{{/outorgados}};"
+        },
+        "item_3_reconhecimento": {
+          "nome": "Item 3 — Reconhecimento da identidade e capacidade",
+          "texto_padrao": "**3-DO RECONHECIMENTO DA IDENTIDADE E CAPACIDADE DAS PARTES:** Eu, Escrevente autorizado(a) por Léia Fernanda de Souza Ritti Ricci, Tabeliã de Notas, identifiquei e qualifiquei as partes, e, à vista dos documentos apresentados (originais e sem rasuras), DOU FÉ da identidade e da capacidade jurídica de cada um para este ato, nos termos do artigo 215, II, do Código Civil Brasileiro."
+        },
+        "item_4_manifestacao": {
+          "nome": "Item 4 — Manifestação de vontade",
+          "texto_padrao": "**4-DA MANIFESTAÇÃO DE VONTADE:** As partes disseram que desejam realizar a VENDA E COMPRA da totalidade de um imóvel, o que fazem nos seguintes termos:"
+        },
+        "item_5_imovel": {
+          "nome": "Item 5 — Do imóvel",
+          "texto_padrao": "**5-«DO:4» «IMÓVEL:4»:** {{imovel.descricao}}, com as demais características, medidas e confrontações constantes da matrícula a seguir citada."
+        },
+        "item_6_titulo_aquisitivo": {
+          "nome": "Item 6 — Título aquisitivo",
+          "texto_padrao": "**6-DO TÍTULO AQUISITIVO:** Imóvel este objeto da matrícula nº {{imovel.matricula}} do Serviço de Registro de Imóveis da {{imovel.circunscricao}} Circunscrição da Comarca de {{imovel.comarca}}, havido «pelo:1» «OUTORGANTE:1» por força dos termos constantes do {{imovel.titulo_aquisitivo}} da citada matrícula."
+        },
+        "item_7_disponibilidade": {
+          "nome": "Item 7 — Da disponibilidade",
+          "texto_padrao": "**7-DA DISPONIBILIDADE:** «O:1» «OUTORGANTE:1» «VENDEDOR:1» «declara:1» que «é:1» «senhor:1» e «legítimo:1» «possuidor:1» da totalidade «DO:4» «IMÓVEL:4» ora «vendido:4», «o:4» «qual:4» «esta:4» «livre:4» e «desembaraçado:4» de quaisquer ônus, ações fundadas em direito real e pessoal ou reipersecutória."
+        },
+        "item_8_situacao_fiscal": {
+          "nome": "Item 8 — Da situação fiscal",
+          "texto_padrao": "**8-DA SITUAÇÃO FISCAL:** «O:4» «imóvel:4» não «possui:4» débitos tributários em aberto até o presente exercício, conforme «Certidão:4» «Negativa:4» de Débitos Municipais «nº:4» {{iptu.certidao_numero}} «emitida:4» em {{iptu.certidao_data}}, pela Prefeitura Municipal de Curitiba/PR, válida até {{iptu.certidao_validade}}, estando «o:4» «mesmo:4» cadastrado sob a indicação fiscal nº {{imovel.inscricao_iptu}}."
+        },
+        "item_9_pagamento": {
+          "nome": "Item 9 — Da venda e forma de pagamento",
+          "texto_padrao": "**9-DA VENDA E COMPRA E FORMA DE PAGAMENTO:** «O:1» «OUTORGANTE:1» «VENDEDOR:1» «VENDE:1» para «O:2» «OUTORGADO:2» «COMPRADOR:2» a {{fracao_vendida}} «DO:4» «IMÓVEL:4» «descrito:4» no item 5 da presente Escritura Pública, pelo preço certo de {{valor}}, importância essa que «O:1» «VENDEDOR:1» «confessa:1» e «declara:1» haver recebido «do:2» «COMPRADOR:2» por meio de {{forma_pagamento}}, pelo qual «O:1» «OUTORGANTE:1» «VENDEDOR:1» «dá:1» plena, geral e irrevogável quitação."
+        },
+        "item_10_transmissao": {
+          "nome": "Item 10 — Da transmissão do bem imóvel",
+          "texto_padrao": "**10-DA TRANSMISSÃO «DO:4» «BEM:4» «IMÓVEL:4»:** «O:1» «VENDEDOR:1» «transfere:1» «ao:2» «OUTORGADO:2» «COMPRADOR:2», o domínio sobre «o:4» «IMÓVEL:4» «objeto:4» da «matrícula:4» «nº:4» {{imovel.matricula}} supra «mencionada:4», «o:4» «qual:4» se «consolidará:4» com o registro desta escritura junto ao referido Serviço Registral, nos termos do artigo 1245 do Código Civil Brasileiro, e, desde já transmite a posse, direitos e ações sobre «o:4» «IMÓVEL:4», para que «o:2» «mesmo:2» tome posse, «use:2», «goze:2» e «disponha:2» livremente como «seu:4» que «fica:4» sendo, não só por bem desta escritura como pela cláusula \"CONSTITUTI\", obrigando-se ainda, «O:1» «OUTORGANTE:1» «VENDEDOR:1» a fazer a presente venda sempre boa, firme e valiosa, por si e seus herdeiros ou sucessores e a responder pela evicção de direito na forma da Lei. Assim, pelas partes, me foi dito que aceitam a presente escritura em todos os seus expressos termos, com tudo o que nela se contém, e com a qual estão de pleno acordo."
+        },
+        "item_11_declaracoes_outorgante": {
+          "nome": "Item 11 — Declarações do outorgante vendedor",
+          "sub_itens": [
+            {
+              "id": "cabecalho",
+              "texto_padrao": "**11-DAS DECLARAÇÕES «DO:1» «OUTORGANTE:1» «VENDEDOR:1»:** «O:1» «VENDEDOR:1» «declara:1» sob pena de responsabilidade civil e penal, que:",
+              "sem_letra": true
+            },
+            {
+              "id": "a_inexistencia_onus",
+              "texto_padrao": "{{letra}})inexistem ações reais, pessoais e reipersecutórias e outros ônus reais incidentes sobre «o:4» «IMÓVEL:4» (Art. 1º, parágrafo 3°, do Decreto 93.240/86){{onus_citacao}};"
+            },
+            {
+              "id": "b_inss",
+              "texto_padrao": "{{letra}})não «é:1» «empregador:1» «rural:1» ou «urbano:1», e, portanto, «deixa:1» de apresentar «certidão:1» do INSS-Instituto Nacional do Seguro Social;"
+            },
+            {
+              "id": "c_condominio",
+              "dispensavel_se": "declaracao_condominio_dispensada",
+              "texto_padrao": "{{letra}})se «encontra:1» com as obrigações condominiais rigorosamente cumpridas e quitadas até a presente data e «assume:1» todas e quaisquer responsabilidades, dívidas e dúvidas decorrentes deste fato, conforme disposto no Parágrafo 2º, Artigo 2º, da Lei nº 7.433, de 18/12/85."
+            }
+          ]
+        },
+        "item_12_declaracoes_outorgado": {
+          "nome": "Item 12 — Declarações do outorgado comprador",
+          "texto_padrao": "**12-DAS DECLARAÇÕES «DO:2» «COMPRADOR:2»:** «O:2» «COMPRADOR:2», de outro lado, «declara:2»: a)Que «aceita:2» esta escritura em todos os seus termos, e que assume integral responsabilidade pelas declarações prestadas, e pelo suprimento de metragens e confrontações, de acordo com o facultado pelo Código de Normas da Corregedoria Geral da Justiça do Estado do Paraná; b)«Declara:2» ciência, ainda, com relação à cautela e segurança do negócio jurídico acima acordado e sobre eventuais demandas ou ônus real em nome «DO:1» «OUTORGANTE:1» «VENDEDOR:1», isentando esta serventia de quaisquer responsabilidades; c)Que «foi:2» devidamente «orientado:2» por mim, Escrevente da Tabeliã, sobre a necessidade do registro da presente escritura no Serviço de Registro de Imóveis competente para aperfeiçoamento do presente negócio jurídico, conforme preconiza o Código Civil Brasileiro em seu artigo 1.245.{{parte_ideal_texto}}"
+        },
+        "item_13_declaracoes_partes": {
+          "nome": "Item 13 — Declarações das partes",
+          "sub_itens": [
+            {
+              "id": "cabecalho",
+              "texto_padrao": "**13-DAS DECLARAÇÕES DAS PARTES:** As partes declaram que:",
+              "sem_letra": true
+            },
+            {
+              "id": "a_corretor",
+              "texto_padrao": "{{letra}})Em observância a Lei n° 19.428 de 15/03/2018, pelas partes me foi dito que não houve intermediação de corretores na presente transação;",
+              "variantes": [
+                {
+                  "id": "com_corretor",
+                  "condicao": "Transação intermediada por corretor",
+                  "acao": "substitui",
+                  "texto": "{{letra}})Em observância a Lei n° 19.428 de 15/03/2018, pelas partes me foi dito que a presente operação foi intermediada pelo corretor de imóveis {{corretor.nome}} - CPF/MF / CNPJ/MF: {{corretor.documento}} - CRECI: {{corretor.creci}};"
+                }
+              ]
+            },
+            {
+              "id": "b_metragens",
+              "texto_padrao": "{{letra}})Que assumem integral responsabilidade pelo suprimento de metragens e confrontações «do:4» «imóvel:4», de acordo com o facultado pelo Código de Normas da Corregedoria Geral da Justiça do Estado do Paraná;"
+            },
+            {
+              "id": "c_diligencias",
+              "texto_padrao": "{{letra}})Que autorizam expressamente a realização das gestões e diligências necessárias ao preparo do ato, em conformidade ao disposto no artigo 664 do Código de Normas do Foro Extrajudicial da Corregedoria-Geral da Justiça do Estado do Paraná;"
+            }
+          ]
+        },
+        "item_14_documentos_certidoes": {
+          "nome": "Item 14 — Documentos e certidões apresentados",
+          "sub_itens": [
+            {
+              "id": "cabecalho",
+              "texto_padrao": "**14-DOS DOCUMENTOS E CERTIDÕES APRESENTADOS:** Pelas partes contratantes me foi apresentado para lavratura da presente escritura os seguintes documentos:",
+              "sem_letra": true
+            },
+            {
+              "id": "a_onus_matricula",
+              "texto_padrao": "{{letra}})Certidão de Propriedade e Negativa de Ônus Reais e Ações Reais e Pessoais Reipersecutórias, expedida pelo Serviço de Registro de Imóveis da {{imovel.circunscricao}} Circunscrição desta Comarca aos {{matricula.data_expedicao}}, a qual fica arquivada digitalmente nesta Serventia;",
+              "variantes": [
+                {
+                  "id": "onus_dispensado",
+                  "condicao": "Certidão de ônus não apresentada / dispensada",
+                  "acao": "substitui",
+                  "texto": "{{letra}})Certidão de Inteiro Teor da Matrícula, expedida pelo Serviço de Registro de Imóveis da {{imovel.circunscricao}} Circunscrição desta Comarca aos {{matricula.data_expedicao}}, a qual fica arquivada digitalmente nesta Serventia."
+                }
+              ]
+            },
+            {
+              "id": "b_trabalhista",
+              "dispensavel_se": "outorgante_0_certidao_debitos_trabalhistas_dispensada",
+              "texto_padrao": "{{letra}})Certidão Negativa de Débitos Trabalhistas sob nº {{outorgante.certidoes.debitos_trabalhistas.numero}}, expedida eletronicamente pelo Tribunal Superior do Trabalho-TST, em data de {{outorgante.certidoes.debitos_trabalhistas.data_emissao}}, válida até {{outorgante.certidoes.debitos_trabalhistas.data_validade}};"
+            },
+            {
+              "id": "c_1_distribuidor",
+              "dispensavel_se": "outorgante_0_certidao_feitos_1_distribuidor_dispensada",
+              "texto_padrao": "{{letra}})Certidão Negativa expedida pelo 1º Distribuidor de feitos ajuizados desta Comarca sob nº {{outorgante.certidoes.feitos_1_distribuidor.numero}}, em data de {{outorgante.certidoes.feitos_1_distribuidor.data_emissao}};"
+            },
+            {
+              "id": "d_2_distribuidor",
+              "dispensavel_se": "outorgante_0_certidao_feitos_2_distribuidor_dispensada",
+              "texto_padrao": "{{letra}})Certidão Negativa expedida pelo 2º Distribuidor de feitos ajuizados desta Comarca sob nº {{outorgante.certidoes.feitos_2_distribuidor.numero}}, em data de {{outorgante.certidoes.feitos_2_distribuidor.data_emissao}};"
+            },
+            {
+              "id": "e_trt",
+              "dispensavel_se": "outorgante_0_certidao_feitos_trt_dispensada",
+              "texto_padrao": "{{letra}})Certidão Negativa de Ações Trabalhistas expedida eletronicamente pelo Tribunal Regional do Trabalho - 9ª Região, em data de {{outorgante.certidoes.feitos_trt.data_emissao}}, válida por 30 (trinta) dias da data de expedição;"
+            },
+            {
+              "id": "f_trf",
+              "dispensavel_se": "outorgante_0_certidao_feitos_trf_dispensada",
+              "texto_padrao": "{{letra}})Certidão Negativa de Distribuição de Ações Cíveis sob nº {{outorgante.certidoes.feitos_trf.numero}}, expedida pela Justiça Federal da 4ª Região em data de {{outorgante.certidoes.feitos_trf.data_emissao}};"
+            },
+            {
+              "id": "g_tributos_federais",
+              "dispensavel_se": "outorgante_0_certidao_tributos_federais_dispensada",
+              "texto_padrao": "{{letra}})Certidão Negativa de Débitos relativos a Tributos Federais e à Dívida Ativa da União, administrados pela Secretaria da Receita Federal e a Procuradoria-Geral da Fazenda Nacional, código de controle sob nº {{outorgante.certidoes.tributos_federais.numero}}, expedida em data de {{outorgante.certidoes.tributos_federais.data_emissao}}, válida até {{outorgante.certidoes.tributos_federais.data_validade}};"
+            },
+            {
+              "id": "h_tributos_estaduais",
+              "dispensavel_se": "outorgante_0_certidao_tributos_estaduais_dispensada",
+              "texto_padrao": "{{letra}})Certidão Negativa de Débitos de Tributos Estaduais sob nº {{outorgante.certidoes.tributos_estaduais.numero}}, expedida em data de {{outorgante.certidoes.tributos_estaduais.data_emissao}} pela Secretaria da Fazenda Pública e Coordenadoria da Receita Estadual do Paraná, válida até {{outorgante.certidoes.tributos_estaduais.data_validade}};"
+            },
+            {
+              "id": "funrejus",
+              "texto_padrao": "Guia de Recolhimento ao Funrejus sob nº {{guia_funrejus.numero}}, no valor de R$ {{guia_funrejus.valor}}, devidamente quitada aos {{guia_funrejus.data}};"
+            },
+            {
+              "id": "itbi",
+              "texto_padrao": "Guia de Recolhimento do ITBI - Imposto de Transmissão de Bens Imóveis inter vivos, Doc n° {{guia_itbi.doc}}, conforme protocolo n° {{guia_itbi.protocolo}} da Prefeitura Municipal de Curitiba/PR, no valor de R$ {{guia_itbi.valor}}, alíquota de 2,7% (dois vírgula sete por cento) sobre o valor da avaliação fiscal de R$ {{guia_itbi.valor_avaliacao}}, relativa à presente compra e venda, quitada em {{guia_itbi.data}}, a qual fica arquivada digitalmente nesta Serventia."
+            }
+          ]
+        },
+        "item_15_requerimento": {
+          "nome": "Item 15 — Do requerimento",
+          "texto_padrao": "**15-DO REQUERIMENTO:** As partes requerem e autorizam o Oficial de Registro de Imóveis competente a realizar toda e qualquer averbação necessária para registrar esta escritura. Os dados e elementos declaratórios constantes desta escritura foram fornecidos e conferidos pelas partes e após as assinaturas são inalteráveis, e a retificação dos mesmos somente será efetuada mediante a lavratura de escritura de retificação, o qual deverá ser assinado por todas as partes integrantes desta e sob cobrança de emolumentos."
+        },
+        "item_16_doi": {
+          "nome": "Item 16 — Da emissão da DOI",
+          "texto_padrao": "**16-DA EMISSÃO DA DOI:** Foi emitida e será enviada à Receita Federal do Brasil a DOI (Declaração sobre Operações Imobiliárias)."
+        },
+        "item_17_mandato": {
+          "nome": "Item 17 — Da cláusula mandato",
+          "texto_padrao": "**17-DA CLÁUSULA MANDATO:** «Pelo:1» «OUTORGANTE:1» «VENDEDOR:1» me foi dito que «confere:1» «ao:2» «OUTORGADO:2» «COMPRADOR:2» todos os poderes necessários para o fiel cumprimento da presente Escritura Pública de Compra e Venda, junto ao Cartório de Notas, e demais repartições Públicas em geral com a especial finalidade de rerratificarem e/ou aditarem a presente, se necessário for, para que a mesma alcance o Registro Imobiliário competente, ficando, outrossim, aqui consignado que é expressamente vedada a retificação superveniente do preço ora estabelecido para a presente transação."
+        },
+        "item_18_indisponibilidade": {
+          "nome": "Item 18 — Da indisponibilidade de bens (CNIB)",
+          "texto_padrao": "**18-DA INDISPONIBILIDADE DE BENS:** {{cnib_resultado}}."
+        },
+        "item_19_coaf": {
+          "nome": "Item 19 — COAF",
+          "texto_padrao": "**19-COAF:** Conforme previsto no PROVIMENTO Nº 161, DE 11 DE MARÇO DE 2024 do Conselho Nacional de Justiça, as partes declaram que não se enquadram na condição de pessoas expostas politicamente, nos termos da Resolução Coaf nº 40, de 22 de Novembro de 2021."
+        },
+        "item_20_lgpd": {
+          "nome": "Item 20 — LGPD",
+          "texto_padrao": "**20-DA LEI GERAL DE PROTEÇÃO DE DADOS:** Todos os comparecentes e partes do presente ato, EXPRESSAMENTE DECLARAM: a)ciência e concordância, de forma livre, informada e inequívoca, com o fato de que os Notários, Registradores e seus auxiliares, em decorrência da lavratura do ato, poderão acessar, utilizar, manter e processar, eletrônica e manualmente, dados pessoais e as informações e demais dados prestados, compartilhando-os com outros agentes de tratamento de dados, exclusivamente para fins de execução e conclusão do ato notarial ou registral solicitado pelas partes; b)que estão cientes de que os dados poderão ser fornecidos aos sistemas de alimentação obrigatória, tais como DOI, COAF, CENSEC e similares, por imposição normativa e legal; c)que estão cientes que, dado o caráter público dos atos notariais e registrais, poderá ser fornecida certidão deste ato notarial a terceiros, salvo exceções normativas. Tudo em conformidade com a Lei nº 13.709/2018 - Lei Geral de Proteção de Dados Pessoais (LGPD), em atendimento ao disposto no Código de Normas da Corregedoria Geral de Justiça do Estado do Paraná, art. 41, inc. XIII (com a redação dada pelo Provimento 318/2023 – CGJ-TJPR)."
+        },
+        "item_21_encerramento": {
+          "nome": "Item 21 — Do encerramento",
+          "texto_padrao": "**21-DO ENCERRAMENTO:** Esta escritura foi lida para às partes, que a acharam em tudo conforme, em todos os seus termos, a qual foi pelas mesmas assinada, dispensada a presença e assinatura das testemunhas instrumentárias de conformidade com o que faculta o artigo 676 Código de Normas da Corregedoria Geral de Justiça do Estado do Paraná, e, cumpridas todas as exigências legais e fiscais inerentes à legitimidade deste ato. E de acordo com o artigo 674 do Código de Normas, a presente será registrada junto ao Distribuidor competente."
+        }
+      },
+      "ordem": [
+        "cabecalho",
+        "item_1_outorgante",
+        "item_2_outorgado",
+        "item_3_reconhecimento",
+        "item_4_manifestacao",
+        "item_5_imovel",
+        "item_6_titulo_aquisitivo",
+        "item_7_disponibilidade",
+        "item_8_situacao_fiscal",
+        "item_9_pagamento",
+        "item_10_transmissao",
+        "item_11_declaracoes_outorgante",
+        "item_12_declaracoes_outorgado",
+        "item_13_declaracoes_partes",
+        "item_14_documentos_certidoes",
+        "item_15_requerimento",
+        "item_16_doi",
+        "item_17_mandato",
+        "item_18_indisponibilidade",
+        "item_19_coaf",
+        "item_20_lgpd",
+        "item_21_encerramento"
+      ]
+    }
+  }
+}

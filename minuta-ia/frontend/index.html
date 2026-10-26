@@ -1,0 +1,3654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Copiloto Notarial</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj4KPHJlY3QgeD0iMTAiIHk9IjYiIHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDgiIHJ4PSIxMCIgZmlsbD0iIzEwMkE0MyIvPgo8cG9seWdvbiBwb2ludHM9IjY2LDYgOTAsNiA5MCwzMCIgZmlsbD0iI0I2OUE2MiIvPgo8cmVjdCB4PSIzMiIgeT0iNDAiIHdpZHRoPSIxMyIgaGVpZ2h0PSI0OCIgZmlsbD0iI0Y1RjJFQSIvPgo8cmVjdCB4PSI1NyIgeT0iNDAiIHdpZHRoPSIxMyIgaGVpZ2h0PSI0OCIgZmlsbD0iI0Y1RjJFQSIvPgo8cG9seWdvbiBwb2ludHM9IjMyLDQwIDQ1LDQwIDcwLDg4IDU3LDg4IiBmaWxsPSIjRjVGMkVBIi8+Cjwvc3ZnPg==">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --preto: #F5F2EA;
+    --grafite: #FFFFFF;
+    --grafite-claro: #F0EBDD;
+    --grafite-borda: #D9D7D0;
+    --verde-sinal: #174A5A;
+    --verde-sinal-escuro: #123B48;
+    --azul-onda: #B69A62;
+    --bruma: #102A43;
+    --texto-sec: #55677A;
+    --botao: #174A5A;
+    --botao-hover: #123B48;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--preto);
+    color: var(--bruma);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+  }
+  .wordmark {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  .nav-toggle {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    padding: 10px 16px 0;
+    position: fixed;
+    top: 0; right: 0; z-index: 999;
+    opacity: 0.35;
+    transition: opacity .2s;
+  }
+  .nav-toggle:hover { opacity: 1; }
+  .nav-toggle button {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    padding: 3px 0;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: var(--texto-sec);
+    cursor: pointer;
+  }
+  .nav-toggle button.active { color: var(--verde-sinal); border-bottom-color: var(--verde-sinal); }
+
+  /* ---------- SELO / MARCA ---------- */
+  .selo-mark, .selo-mark-small { display: block; }
+
+  /* ---------- TELA DE LOGIN ---------- */
+  #login-screen {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .login-card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--grafite);
+    border: 1px solid var(--grafite-claro);
+    border-radius: 8px;
+    padding: 40px 36px;
+    box-shadow: 0 1px 2px rgba(16,42,67,0.04), 0 8px 28px rgba(16,42,67,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .login-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--verde-sinal), var(--azul-onda), transparent);
+  }
+  .login-card .selo-mark { width: 37px; height: 57px; margin: 0 auto 20px; filter: none; }
+  .login-title {
+    text-align: center;
+    font-size: 26px;
+    color: var(--bruma);
+    margin: 0 0 4px;
+  }
+  .login-slogan {
+    text-align: center;
+    font-size: 12px;
+    color: var(--verde-sinal);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 32px;
+  }
+  .field { margin-bottom: 18px; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--texto-sec);
+    margin-bottom: 7px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .field input, .field textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #D9D7D0;
+    border-radius: 5px;
+    background: #FFFFFF;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    color: var(--bruma);
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--verde-sinal);
+    box-shadow: 0 0 0 3px rgba(23,74,90,0.15);
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: var(--botao);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .btn-primary:hover { background: var(--botao-hover); }
+
+  /* ---------- LAYOUT COM SIDEBAR (workspace + fluxo) ---------- */
+  .shell { display: none; min-height: 100vh; }
+  .shell.visible { display: flex; }
+
+  .sidebar {
+    width: 232px;
+    flex-shrink: 0;
+    background: var(--grafite);
+    border-right: 1px solid var(--grafite-claro);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 18px;
+    position: relative;
+    z-index: 2;
+  }
+  .sidebar .brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 4px 24px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--grafite-claro);
+  }
+  .sidebar .brand .selo-mark-small { width: 26px; height: 40px; }
+  .sidebar .brand span { font-size: 15px; }
+
+  .sidebar nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .sidebar nav a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    color: var(--texto-sec);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .sidebar nav a .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.4; }
+  .sidebar nav a.active {
+    background: rgba(23,74,90,0.1);
+    color: var(--verde-sinal);
+    border: 1px solid rgba(23,74,90,0.25);
+  }
+  .sidebar nav a.active .dot { opacity: 1; box-shadow: 0 0 6px var(--verde-sinal); }
+  .sidebar nav a:hover:not(.active) { color: var(--bruma); }
+  .sidebar nav a.disabled { opacity: 0.35; cursor: default; }
+
+  .sidebar .user-box {
+    border-top: 1px solid var(--grafite-claro);
+    padding-top: 16px;
+    font-size: 12.5px;
+    color: var(--texto-sec);
+  }
+  .sidebar .user-box .nome { color: var(--bruma); font-weight: 500; margin-bottom: 2px; }
+  .sidebar .user-box a { color: var(--azul-onda); text-decoration: none; font-size: 12px; }
+
+  .main-area { flex: 1; padding: 32px 40px 60px; position: relative; z-index: 2; }
+
+  /* ---------- AREA DE TRABALHO (dashboard) ---------- */
+  .dash-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; }
+  .dash-header h1 { font-size: 22px; margin: 0 0 4px; }
+  .dash-header .sub { font-size: 13px; color: var(--texto-sec); }
+  .btn-nova {
+    background: var(--botao);
+    color: #FFFFFF;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(23,74,90,0.18);
+  }
+
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+  .stat-card {
+    background: var(--grafite);
+    border: 1px solid var(--grafite-claro);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--verde-sinal), transparent 70%);
+  }
+  .stat-card .label { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--texto-sec); margin-bottom: 10px; }
+  .stat-card .value { font-family: 'Lora', serif; font-size: 30px; font-weight: 600; color: var(--bruma); }
+  .stat-card .value .unidade { font-size: 14px; color: var(--texto-sec); font-weight: 400; margin-left: 4px; }
+
+  .table-section {
+    background: var(--grafite);
+    border: 1px solid var(--grafite-claro);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .table-section h3 {
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--bruma);
+    padding: 18px 20px;
+    margin: 0;
+    border-bottom: 1px solid var(--grafite-borda);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead td { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--texto-sec); padding: 10px 20px; }
+  tbody tr { border-top: 1px solid var(--grafite-claro); }
+  tbody tr:hover { background: rgba(23,74,90,0.04); }
+  tbody td { padding: 14px 20px; color: var(--bruma); }
+  tbody td.sec { color: var(--texto-sec); }
+  .badge { font-size: 11px; padding: 3px 10px; border-radius: 100px; font-weight: 500; }
+  .badge.gerada { background: rgba(23,74,90,0.12); color: var(--verde-sinal); border: 1px solid rgba(23,74,90,0.3); }
+  .badge.rascunho { background: rgba(182,154,98,0.12); color: #B69A62; border: 1px solid rgba(182,154,98,0.3); }
+  .cert-status-lista { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+  .cert-status-linha { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 10px; border-radius: 6px; }
+  .cert-status-linha.cert-ok { background: rgba(23,74,90,0.08); color: var(--verde-sinal); }
+  .cert-status-linha.cert-dispensada { background: rgba(16,42,67,0.035); color: var(--texto-sec, #55677A); }
+  .cert-status-linha.cert-pendente { background: rgba(217,68,68,0.10); color: #E86464; font-weight: 500; }
+  .btn-link-cert { background: transparent; border: 1px solid currentColor; border-radius: 4px; font-size: 11px; padding: 1px 8px; margin-left: 8px; cursor: pointer; color: inherit; }
+  .btn-link-cert:hover { opacity: 0.8; }
+
+  /* ---------- FLUXO (documentos / conferencia / gerar) ---------- */
+  .stepper { display: flex; justify-content: center; gap: 0; margin: 4px 0 36px; }
+  .step { display: flex; align-items: center; gap: 10px; padding: 0 28px; position: relative; }
+  .step:not(:last-child)::after {
+    content: ''; position: absolute; right: -1px; top: 50%; width: 56px; height: 1px;
+    background: var(--grafite-claro);
+  }
+  .step .num {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-family: 'IBM Plex Mono', monospace;
+    border: 1px solid var(--grafite-claro); color: var(--texto-sec);
+  }
+  .step.current .num { background: var(--verde-sinal); color: #FFFFFF; border-color: var(--verde-sinal); box-shadow: 0 2px 6px rgba(23,74,90,0.3); }
+  .step.done .num { background: transparent; border-color: var(--azul-onda); color: var(--azul-onda); }
+  .step .label { font-size: 13px; color: var(--texto-sec); }
+  .step.current .label { color: var(--bruma); font-weight: 600; }
+
+  .content { max-width: 760px; margin: 0 auto; }
+
+  .form-section {
+    background: var(--grafite);
+    border: 1px solid var(--grafite-claro);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .form-section h3 {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--bruma);
+    margin: 0 0 20px;
+    padding-bottom: 14px;
+    border-bottom: none;
+    position: relative;
+  }
+  .form-section h3::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 32px; height: 3px;
+    background: var(--azul-onda);
+    border-radius: 2px;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+  .form-grid .field { margin-bottom: 0; }
+  .form-grid input.mono, .form-grid textarea.mono { letter-spacing: 0.02em; color: var(--azul-onda); }
+
+  .actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
+  .btn-ghost {
+    padding: 11px 20px; background: transparent; border: 1px solid var(--grafite-claro);
+    border-radius: 5px; font-size: 14px; color: var(--bruma); cursor: pointer;
+  }
+
+  /* ---------- MOMENTO DO SELO DIGITAL ---------- */
+  #selo-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(10,15,18,0.92);
+    align-items: center; justify-content: center; z-index: 50; flex-direction: column;
+  }
+  .selo-caixa { width: 220px; height: 220px; position: relative; display: flex; align-items: center; justify-content: center; }
+  .selo-anel { position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--grafite-claro); }
+  .selo-anel.interno { inset: 24px; border-color: rgba(23,74,90,0.25); }
+  .selo-scan {
+    position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--verde-sinal), transparent);
+    box-shadow: 0 0 4px 1px rgba(23,74,90,0.3); top: 0; opacity: 0;
+  }
+  .selo-scan.rodando { animation: varrer 1.1s ease-in-out forwards; }
+  @keyframes varrer { 0% { top: 6%; opacity: 1; } 90% { top: 92%; opacity: 1; } 100% { top: 92%; opacity: 0; } }
+  .selo-check { font-family: 'Lora', serif; text-align: center; opacity: 0; transform: scale(0.7); }
+  .selo-check.show { animation: materializar 0.5s cubic-bezier(.2,1.4,.4,1) forwards; }
+  @keyframes materializar { to { opacity: 1; transform: scale(1); } }
+  .selo-check .ring {
+    width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--verde-sinal);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;
+    box-shadow: 0 0 8px rgba(23,74,90,0.2);
+  }
+  .selo-check .ring svg { width: 28px; height: 28px; }
+  .selo-check .txt { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--verde-sinal); }
+  .selo-msg { margin-top: 20px; font-size: 14px; color: var(--bruma); opacity: 0; }
+  .selo-msg.show { opacity: 1; transition: opacity 0.4s ease 0.15s; }
+  .selo-download {
+    margin-top: 20px; padding: 11px 24px; background: var(--botao); color: #FFFFFF;
+    border: none; border-radius: 5px; font-size: 14px; font-weight: 600; cursor: pointer; opacity: 0;
+  }
+  .selo-download.show { opacity: 1; transition: opacity 0.4s ease 0.3s; }
+  .selo-fechar {
+    margin-top: 14px; background: none; border: none; font-size: 12px; color: var(--texto-sec);
+    opacity: 0; text-decoration: underline; cursor: pointer;
+  }
+  .selo-fechar.show { opacity: 0.8; transition: opacity 0.4s ease 0.3s; }
+
+  .select-tipo-ato {
+    width: 100%; padding: 13px 40px 13px 14px; border: 1px solid #D9D7D0; border-radius: 6px;
+    background: #FFFFFF; color: var(--bruma); font-family: 'IBM Plex Sans', sans-serif; font-size: 14.5px;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; cursor: pointer;
+  }
+  .select-tipo-ato:focus { outline: none; border-color: var(--verde-sinal); box-shadow: 0 0 0 3px rgba(23,74,90,0.15); }
+  .select-tipo-ato optgroup { background: var(--grafite); color: var(--texto-sec); font-style: normal; font-size: 11px; }
+  .select-tipo-ato option { background: var(--grafite); color: var(--bruma); font-size: 14px; padding: 6px; }
+  .dossie { display: flex; flex-direction: column; gap: 8px; }
+  .dossie-slot {
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid var(--grafite-claro); border-radius: 7px;
+    padding: 11px 14px; background: rgba(16,42,67,0.02);
+  }
+  .dossie-slot .icon {
+    width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; border: 1px solid var(--grafite-claro); color: var(--texto-sec);
+  }
+  .dossie-slot .info { flex: 1; min-width: 0; }
+  .dossie-slot .tab { font-size: 13px; color: var(--bruma); }
+  .dossie-slot .hint { font-size: 11.5px; color: var(--texto-sec); margin-top: 1px; }
+  .dossie-slot .acao { font-size: 12px; color: var(--azul-onda); flex-shrink: 0; cursor: pointer; }
+  .dossie-slot.opcional .tab::after { content: " (dispensável)"; font-size: 11px; color: var(--texto-sec); font-weight: 400; }
+  .dossie-slot.preenchido .icon { border-color: var(--verde-sinal); color: var(--verde-sinal); background: rgba(23,74,90,0.1); }
+  .dossie-slot:not(.preenchido) .icon { border-style: dashed; }
+
+  .pf-pj-toggle { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .pf-pj-label { font-size: 12px; color: var(--texto-sec); }
+  .pf-pj-btn {
+    padding: 6px 14px; border-radius: 5px; border: 1px solid var(--grafite-claro);
+    background: transparent; color: var(--texto-sec); font-size: 13px; cursor: pointer;
+  }
+  .pf-pj-btn.ativo { border-color: var(--verde-sinal); color: var(--verde-sinal); background: rgba(23,74,90,0.08); }
+
+  .grupo-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--texto-sec); margin: 0 0 10px; }
+  .party-card { border-left: 2px solid var(--grafite-claro); padding-left: 16px; }
+  .party-head h3 { margin-bottom: 2px; }
+  .party-alt { font-size: 13px; font-weight: 400; color: var(--texto-sec); }
+  .chave-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+  .chave-lado { font-size: 12.5px; color: var(--texto-sec); transition: color .15s; }
+  .chave-lado.ativo { color: var(--bruma); font-weight: 600; }
+  .chave {
+    position: relative; width: 38px; height: 21px; flex-shrink: 0; cursor: pointer;
+    background: var(--grafite-claro); border: 1px solid var(--grafite-claro); border-radius: 999px;
+    transition: .2s;
+  }
+  .chave .knob {
+    position: absolute; width: 15px; height: 15px; left: 2px; top: 2px;
+    background: var(--texto-sec); border-radius: 50%; transition: .2s;
+  }
+  .chave.ativo { background: rgba(23,74,90,0.18); border-color: var(--verde-sinal); }
+  .chave.ativo .knob { transform: translateX(17px); background: var(--verde-sinal); }
+  .micro-nota { font-size: 12px; color: var(--texto-sec); margin-top: 8px; }
+  .field.destaque input { border-color: var(--azul-onda); box-shadow: 0 0 0 1px rgba(111,168,220,0.25); }
+  .field.destaque label { color: var(--azul-onda); }
+  .alert-box {
+    border: 1px solid rgba(255,177,66,0.4); background: rgba(255,177,66,0.06);
+    border-radius: 8px; padding: 14px 16px; margin-top: 4px;
+  }
+  .alert-title { color: #FFB142; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .alert-box ul { margin: 0; padding-left: 18px; }
+  .alert-box li { font-size: 13px; color: var(--bruma); line-height: 1.6; }
+  .btn-link { background: none; border: none; color: var(--texto-sec); font-size: 13.5px; cursor: pointer; }
+  .btn-link:hover { color: var(--bruma); }
+  .btn-add {
+    display: block; width: 100%; margin-top: 10px; padding: 10px; text-align: center;
+    background: transparent; border: 1px dashed var(--grafite-claro); border-radius: 7px;
+    color: var(--texto-sec); font-size: 13px; cursor: pointer;
+  }
+  .btn-add:hover { border-color: var(--verde-sinal); color: var(--verde-sinal); }
+  .btn-remover {
+    background: none; border: none; color: var(--texto-sec); font-size: 12px; cursor: pointer; margin-left: auto;
+  }
+  .btn-remover:hover { color: var(--erro, #DC5B5B); }
+  .party-head { display: flex; align-items: center; }
+  .sub-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--texto-sec); margin: 18px 0 10px; }
+
+  .subtabs { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--grafite-claro); }
+  .subtab {
+    background: none; border: none; padding: 8px 4px; margin-right: 16px; font-size: 13px;
+    color: var(--texto-sec); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .subtab.ativo { color: var(--verde-sinal); border-bottom-color: var(--verde-sinal); }
+
+  .dossie-slot.aberto { border-color: var(--verde-sinal); }
+  .item-editor {
+    border: 1px solid var(--verde-sinal); border-radius: 7px; padding: 16px;
+    background: rgba(23,74,90,0.04); margin: -2px 0 4px;
+  }
+  .item-editor label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--texto-sec); margin-bottom: 6px; }
+  .item-editor textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid #D9D7D0; border-radius: 5px;
+    background: #FFFFFF; color: var(--bruma); font-family: 'IBM Plex Sans', sans-serif; font-size: 13px;
+    resize: vertical; margin-bottom: 12px;
+  }
+  .variante-lista { display: flex; flex-direction: column; gap: 12px; }
+  .variante { border-left: 2px solid var(--azul-onda); padding-left: 12px; }
+  .variante-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .variante-condicao { font-size: 12.5px; color: var(--azul-onda); font-weight: 600; }
+  .variante-acao { font-size: 11px; color: var(--texto-sec); background: var(--grafite-claro); padding: 2px 8px; border-radius: 4px; }
+  .item-usado-em { margin-top: 16px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag-ato { font-size: 11.5px; padding: 4px 10px; border-radius: 100px; border: 1px solid var(--grafite-claro); color: var(--texto-sec); }
+  .tag-ato.ativa { border-color: var(--verde-sinal); color: var(--verde-sinal); background: rgba(23,74,90,0.08); }
+
+  .composicao-lista { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .composicao-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+    border: 1px solid var(--grafite-claro); border-radius: 6px; font-size: 13px; color: var(--bruma);
+  }
+  .composicao-item.pendente { border-style: dashed; color: var(--texto-sec); }
+  .handle { color: var(--texto-sec); cursor: grab; }
+  .chip-compartilhado, .chip-pendente {
+    margin-left: auto; font-size: 10.5px; padding: 2px 8px; border-radius: 100px;
+  }
+  .chip-compartilhado { color: var(--azul-onda); border: 1px solid var(--azul-onda); }
+  .chip-pendente { color: #B69A62; border: 1px solid #B69A62; }
+  /* ---- Relatorio de analise de matricula ---- */
+  .rel-cabecalho { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--grafite-borda); padding-bottom:18px; margin-bottom:20px; }
+  .rel-marca { font-size:12px; letter-spacing:1px; color:var(--verde-sinal); text-transform:uppercase; font-weight:600; }
+  .rel-titulo { font-size:20px; font-weight:600; margin:6px 0 4px; color:var(--bruma); }
+  .rel-meta { font-size:12px; color:var(--texto-sec); }
+  .rel-card { background:var(--grafite); border:1px solid var(--grafite-borda); border-radius:10px; padding:16px 20px; margin-bottom:14px; }
+  .rel-card h3 { font-size:11.5px; text-transform:uppercase; letter-spacing:0.5px; color:var(--texto-sec); margin:0 0 12px; font-weight:600; }
+  .rel-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .rel-label { font-size:11px; color:var(--texto-sec); margin-bottom:2px; }
+  .rel-valor { font-size:14px; margin-bottom:10px; color:var(--bruma); }
+  .rel-badge-ok { display:inline-flex; align-items:center; gap:6px; background:rgba(52,211,153,0.12); color:#34D399; padding:6px 12px; border-radius:6px; font-size:13px; font-weight:600; }
+  .rel-badge-critico { display:inline-flex; align-items:center; gap:6px; background:rgba(248,113,113,0.12); color:#F87171; padding:6px 12px; border-radius:6px; font-size:13px; font-weight:600; margin-bottom:8px; }
+  .rel-item-onus { font-size:13px; margin:4px 0 4px 10px; color:var(--bruma); }
+  .rel-item-onus .rel-impl { color:var(--texto-sec); font-size:12px; }
+  .rel-alerta { background:rgba(251,191,36,0.1); border-left:3px solid #FBBF24; padding:10px 14px; border-radius:0 6px 6px 0; font-size:13px; margin-bottom:8px; color:var(--bruma); }
+  .rel-timeline { border-left:2px solid var(--grafite-borda); padding-left:16px; margin-left:6px; }
+  .rel-tl-item { position:relative; margin-bottom:14px; }
+  .rel-tl-item::before { content:''; position:absolute; left:-21px; top:4px; width:9px; height:9px; border-radius:50%; background:var(--azul-onda); }
+  .rel-tl-tipo { font-size:13px; font-weight:600; color:var(--bruma); }
+  .rel-tl-data { font-size:11px; color:var(--texto-sec); }
+  .rel-tl-desc { font-size:12.5px; color:var(--texto-sec); margin-top:2px; }
+  .rel-rodape { text-align:center; font-size:11px; color:var(--texto-sec); margin-top:24px; padding-top:14px; border-top:1px solid var(--grafite-borda); }
+  .btn-imprimir-relatorio { background:var(--grafite-claro); border:1px solid var(--grafite-borda); color:var(--bruma); padding:8px 16px; border-radius:6px; font-size:13px; cursor:pointer; height:fit-content; }
+  .btn-imprimir-relatorio:hover { border-color:var(--verde-sinal); }
+  @media print {
+    @page { margin: 1.3cm 1.5cm; }
+    .sidebar, .btn-imprimir-relatorio, .actions { display:none !important; }
+    #shell-analista > .main-area > .content > h1,
+    #shell-analista > .main-area > .content > p.micro-nota,
+    #shell-analista .form-section:first-of-type { display:none !important; }
+    body, .main-area, .content { background:#fff !important; color:#1a1a1a !important; font-size:11.5px !important; }
+    * { font-family: Georgia, 'Times New Roman', serif !important; line-height:1.25 !important; }
+
+    .rel-logo-print { display:block !important; margin:0 auto 2px auto !important; }
+
+    .rel-cabecalho { display:block !important; text-align:center; border-bottom:2px solid #1a1a1a !important; padding-bottom:6px; margin-bottom:10px; }
+    .rel-marca { color:#444 !important; font-family:Arial, sans-serif !important; font-size:9.5px !important; }
+    .rel-titulo { color:#1a1a1a !important; font-weight:normal !important; font-size:16px !important; margin:2px 0 2px !important; }
+    .rel-meta { color:#555 !important; font-family:Arial, sans-serif !important; font-size:9.5px !important; }
+
+    .rel-card { background:#fff !important; border:none !important; border-bottom:1px solid #999 !important; border-radius:0 !important; padding:5px 0 7px !important; margin-bottom:0 !important; break-inside:avoid; }
+    .rel-card h3 { font-family:Arial, sans-serif !important; font-size:10.5px !important; border-bottom:1px solid #999; padding-bottom:2px; margin:0 0 5px !important; color:#1a1a1a !important; }
+    .rel-valor, .rel-titulo, .rel-tl-tipo { color:#1a1a1a !important; }
+    .rel-valor { font-size:11px !important; margin-bottom:4px !important; }
+    .rel-label { font-size:8.5px !important; margin-bottom:0 !important; }
+    .rel-label, .rel-meta, .rel-tl-data, .rel-tl-desc { color:#555 !important; font-family:Arial, sans-serif !important; }
+
+    /* badges viram texto em negrito, sem depender de cor */
+    .rel-badge-ok, .rel-badge-critico { background:none !important; padding:0 !important; font-weight:bold !important; color:#1a1a1a !important; font-size:11px !important; }
+    .rel-item-onus, .rel-impl { color:#1a1a1a !important; font-size:10.5px !important; margin:1px 0 1px 8px !important; }
+
+    /* alertas e sugestoes -- linha vertical simples em vez de fundo amarelo */
+    .rel-alerta { background:none !important; border-left:2px solid #999 !important; color:#1a1a1a !important; font-style:italic; font-size:10px !important; padding:2px 8px !important; margin-bottom:3px !important; }
+
+    /* linha do tempo -- formato tabular, sem bolinhas conectadas */
+    .rel-timeline { border-left:none !important; padding-left:0 !important; margin-left:0 !important; }
+    .rel-tl-item { display:flex !important; gap:10px; border-bottom:1px solid #ddd; padding:2px 0 !important; margin-bottom:0 !important; font-family:Arial, sans-serif !important; font-size:9px !important; align-items:baseline; }
+    .rel-tl-item::before { display:none !important; }
+    .rel-tl-tipo { flex:0 0 105px; font-weight:bold; display:flex !important; gap:4px; align-items:baseline; font-size:9px !important; }
+    .rel-tl-data { display:inline !important; color:#555 !important; font-weight:normal; font-size:8.5px !important; }
+    .rel-tl-desc { flex:1; margin-top:0 !important; font-size:9px !important; }
+
+    .rel-rodape { border-top:1px solid #ccc !important; color:#777 !important; font-family:Arial, sans-serif !important; font-size:8.5px !important; margin-top:8px !important; padding-top:5px !important; }
+    .rel-grid2 { gap:8px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="login-screen">
+  <div class="login-card">
+    <svg class="selo-mark" viewBox="0 0 60 92" fill="none" role="img" aria-label="Copiloto Notarial">
+        <rect x="8" y="4" width="44" height="84" rx="7" fill="#102A43"/>
+        <polygon points="38,4 52,4 52,18" fill="#B69A62"/>
+        <rect x="20" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <rect x="36" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <polygon points="20,34 28,34 44,72 36,72" fill="#F5F2EA"/>
+      </svg>
+    <h1 class="login-title wordmark">Copiloto Notarial</h1>
+    <p class="login-slogan">Você decide. Ele digita.</p>
+    <div id="login-erro" style="display:none; color:#DC5B5B; font-size:13px; margin-bottom:12px; text-align:center;"></div>
+    <div class="field"><label>Usuário</label><input type="text" id="login-usuario" placeholder="joao.silva"></div>
+    <div class="field"><label>Senha</label><input type="password" id="login-senha" placeholder="••••••••••"></div>
+    <a href="#" style="display:block; text-align:right; font-size:12px; color:var(--azul-onda); text-decoration:none; margin:-10px 0 18px;">Esqueci minha senha</a>
+    <button class="btn-primary" id="btn-entrar" onclick="fazerLogin()">Entrar</button>
+
+    <div style="margin-top:16px; text-align:center;">
+      <a href="#" onclick="toggleCriarConta(); return false;" style="font-size:13px; color:var(--texto-sec); text-decoration:none;">Primeiro acesso? Criar conta</a>
+    </div>
+    <div id="criar-conta-form" style="display:none; margin-top:16px; padding-top:16px; border-top:1px solid var(--grafite-claro);">
+      <div class="field"><label>Seu nome</label><input type="text" id="cc-nome"></div>
+      <div class="field"><label>Nome do cartório</label><input type="text" id="cc-cartorio"></div>
+      <div class="field"><label>Escolha um usuário</label><input type="text" id="cc-usuario"></div>
+      <div class="field"><label>Escolha uma senha</label><input type="password" id="cc-senha"></div>
+      <div id="criar-conta-msg" style="font-size:13px; margin-bottom:10px;"></div>
+      <button class="btn-ghost" style="width:100%;" onclick="criarConta()">Criar conta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SHELL (sidebar comum ao dashboard e ao fluxo) ===================== -->
+<div class="shell" id="shell-dash">
+  <div class="sidebar">
+    <div class="brand">
+      <svg class="selo-mark-small" viewBox="0 0 60 92" fill="none" role="img" aria-label="Copiloto Notarial">
+        <rect x="8" y="4" width="44" height="84" rx="7" fill="#102A43"/>
+        <polygon points="38,4 52,4 52,18" fill="#B69A62"/>
+        <rect x="20" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <rect x="36" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <polygon points="20,34 28,34 44,72 36,72" fill="#F5F2EA"/>
+      </svg>
+      <span class="wordmark">Copiloto Notarial</span>
+    </div>
+    <nav>
+      <a class="active"><span class="dot"></span> Área de trabalho</a>
+      <a onclick="mostrar('fluxo')"><span class="dot"></span> Nova minuta</a>
+      <a onclick="mostrar('analista')"><span class="dot"></span> Analista de Matrícula</a>
+      <a class="disabled"><span class="dot"></span> Histórico</a>
+      <a onclick="mostrar('roadmap')"><span class="dot"></span> Implementação</a>
+      <a onclick="mostrar('config')"><span class="dot"></span> Configurações</a>
+    </nav>
+    <div class="user-box">
+      <div class="nome">João Silva</div>
+      <span class="cartorio-usuario">1º Tabelionato de Catanduva</span><br>
+      <a href="#" onclick="sair(); return false;">Sair</a>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="dash-header">
+      <div>
+        <h1>Área de trabalho</h1>
+        <div class="sub" id="dash-data-hoje">Quinta-feira, 21 de agosto</div>
+      </div>
+      <button class="btn-nova" onclick="mostrar('fluxo')">+ Nova minuta</button>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="label" id="stat-label-mes">Minutas geradas — este mês</div>
+        <div class="value" id="stat-mes">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total de minutas geradas</div>
+        <div class="value" id="stat-total">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Última minuta gerada</div>
+        <div class="value" id="stat-ultima" style="font-size:20px;">—</div>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <h3>Atividade recente</h3>
+      <table>
+        <thead>
+          <tr><td>Partes</td><td>Tipo de ato</td><td>Data</td><td>Status</td></tr>
+        </thead>
+        <tbody id="tabela-atividade-recente">
+          <tr><td colspan="4" class="sec">Nenhuma minuta gerada ainda.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SHELL (fluxo de nova minuta) ===================== -->
+<div class="shell" id="shell-fluxo">
+  <div class="sidebar">
+    <div class="brand">
+      <svg class="selo-mark-small" viewBox="0 0 60 92" fill="none" role="img" aria-label="Copiloto Notarial">
+        <rect x="8" y="4" width="44" height="84" rx="7" fill="#102A43"/>
+        <polygon points="38,4 52,4 52,18" fill="#B69A62"/>
+        <rect x="20" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <rect x="36" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <polygon points="20,34 28,34 44,72 36,72" fill="#F5F2EA"/>
+      </svg>
+      <span class="wordmark">Copiloto Notarial</span>
+    </div>
+    <nav>
+      <a onclick="mostrar('dash')"><span class="dot"></span> Área de trabalho</a>
+      <a class="active"><span class="dot"></span> Nova minuta</a>
+      <a onclick="mostrar('analista')"><span class="dot"></span> Analista de Matrícula</a>
+      <a class="disabled"><span class="dot"></span> Histórico</a>
+      <a onclick="mostrar('roadmap')"><span class="dot"></span> Implementação</a>
+      <a onclick="mostrar('config')"><span class="dot"></span> Configurações</a>
+    </nav>
+    <div class="user-box">
+      <div class="nome">João Silva</div>
+      <span class="cartorio-usuario">1º Tabelionato de Catanduva</span><br>
+      <a href="#" onclick="sair(); return false;">Sair</a>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="stepper">
+      <div class="step current" id="step-tipo"><div class="num">1</div><div class="label">Tipo de ato</div></div>
+      <div class="step" id="step-docs"><div class="num">2</div><div class="label">Documentos</div></div>
+      <div class="step" id="step-conf"><div class="num">3</div><div class="label">Confirmação</div></div>
+      <div class="step" id="step-gerar"><div class="num">4</div><div class="label">Gerar minuta</div></div>
+    </div>
+
+    <!-- PASSO 1: TIPO DE ATO -->
+    <div class="content passo" id="passo-tipo">
+      <div class="form-section">
+        <h3>Tipo de ato (natureza jurídica)</h3>
+        <select class="select-tipo-ato" id="select-tipo-ato">
+          <optgroup label="Compra, venda e doação — outorgante / outorgado">
+            <option value="compra_e_venda_a_vista" selected>Compra e Venda à Vista</option>
+            <option value="compra_e_venda_a_vista_pj">Compra e Venda à Vista — Vendedor Pessoa Jurídica</option>
+            <option value="compra_e_venda_clausula_resolutiva">Compra e Venda com Cláusula Resolutiva</option>
+            <option value="doacao_plena">Doação Plena</option>
+            <option value="doacao_reserva_usufruto">Doação com Reserva de Usufruto</option>
+            <option value="dacao_em_pagamento">Dação em Pagamento</option>
+          </optgroup>
+          <optgroup label="Inventário e renúncias — sempre pessoa física">
+            <option value="inventario_partilha_bem">Inventário com Partilha de Bem</option>
+            <option value="inventario_adjudicacao_bem">Inventário com Adjudicação de Bem</option>
+            <option value="nomeacao_inventariante">Nomeação de Inventariante</option>
+            <option value="renuncia_direitos_hereditarios">Renúncia de Direitos Hereditários</option>
+            <option value="renuncia_usufruto">Renúncia de Usufruto</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="actions">
+        <button class="btn-ghost" onclick="estadoCaso.tipoAto = document.getElementById('select-tipo-ato').value; irPasso('docs')">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASSO 2: DOCUMENTOS -->
+    <div class="content passo" id="passo-docs" style="display:none;">
+
+      <div class="lista-repetivel" id="lista-outorgantes">
+        <div class="form-section party-card">
+          <div class="party-head">
+            <h3>Outorgante <span class="party-alt">(Vendedor)</span></h3>
+          </div>
+          <div class="chave-row">
+            <span class="chave-lado ativo">Pessoa Física</span>
+            <div class="chave" onclick="chaveClique(this, 'pfpj')"><div class="knob"></div></div>
+            <span class="chave-lado">Pessoa Jurídica</span>
+          </div>
+          <div class="chave-row">
+            <span class="chave-lado ativo">Pessoalmente</span>
+            <div class="chave" onclick="chaveClique(this, 'proc')"><div class="knob"></div></div>
+            <span class="chave-lado">Por procuração</span>
+          </div>
+          <div class="chave-row chave-row-pdf-unico">
+            <span class="chave-lado ativo">Documentos separados</span>
+            <div class="chave chave-pdf-unico" onclick="chaveClique(this, 'pdf-unico')"><div class="knob"></div></div>
+            <span class="chave-lado">PDF único (identidade + certidões)</span>
+          </div>
+          <div class="dossie pf-doc-combinado" style="display:none;">
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="combinado">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Documento combinado <span style="color:var(--texto-sec); font-weight:400;">(RG/CNH + certidão de estado civil + comprovante + certidões negativas, tudo no mesmo arquivo)</span></div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="combinado" style="display:none" accept="image/*,.pdf">
+            </div>
+          </div>
+          <div class="dossie doc-pf">
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="doc">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Documento de identificação</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="doc" style="display:none" accept="image/*,.pdf">
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="cnh">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">CNH (opcional)</div><div class="hint">se a pessoa tiver, entra junto na qualificação</div></div>
+              </div>
+              <input type="file" data-doc="cnh" style="display:none" accept="image/*,.pdf">
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="estado_civil">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Certidão de estado civil</div><div class="hint">nascimento, casamento, ou casamento c/ averbação de divórcio</div></div>
+              </div>
+              <input type="file" data-doc="estado_civil" style="display:none" accept="image/*,.pdf">
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="comprovante">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Comprovante de residência</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="comprovante" style="display:none" accept="image/*,.pdf">
+            </div>
+          </div>
+          <div class="dossie doc-pj" style="display:none;">
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="contrato">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Contrato Social ou Estatuto</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="contrato" style="display:none" accept="image/*,.pdf">
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="simplificada">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Certidão Simplificada (Junta Comercial)</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="simplificada" style="display:none" accept="image/*,.pdf">
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="representante">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Documento de identificação do representante legal</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="representante" style="display:none" accept="image/*,.pdf">
+            </div>
+          </div>
+          <div class="dossie">
+            <div class="doc-par">
+              <div class="dossie-slot proc-slot" data-doc="procuracao" style="display:none;">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Procuração</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="procuracao" style="display:none" accept="image/*,.pdf">
+            </div>
+          </div>
+          <div class="conjuge-participacao-bloco conjuge-bloco-pf">
+            <div class="sub-label">Participação do cônjuge (se for casado(a))</div>
+            <select class="select-tipo-ato conjuge-participacao-select" onchange="conjugeParticipacaoMudou(this)">
+              <option value="so_qualifica">Só qualifica (não assina)</option>
+              <option value="outorga_tambem">Cônjuge também outorga (co-vendedor/co-comprador)</option>
+              <option value="anui">Cônjuge apenas anui (consente, não é parte)</option>
+            </select>
+            <div class="chave-row chave-row-conjuge-pdf-unico" style="display:none;">
+              <span class="chave-lado ativo">Documentos separados</span>
+              <div class="chave chave-conjuge-pdf-unico" onclick="chaveClique(this, 'conjuge-pdf-unico')"><div class="knob"></div></div>
+              <span class="chave-lado">PDF único (identidade + certidões)</span>
+            </div>
+            <div class="dossie conjuge-doc-combinado" style="display:none; margin-top:10px;">
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="conjuge_combinado">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Documento combinado do cônjuge <span style="color:var(--texto-sec); font-weight:400;">(identidade + as 7 certidões, tudo no mesmo arquivo)</span></div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="conjuge_combinado" style="display:none" accept="image/*,.pdf">
+              </div>
+            </div>
+            <div class="dossie" style="margin-top:10px;">
+              <div class="doc-par conjuge-doc-par" style="display:none;">
+                <div class="dossie-slot" data-doc="conjuge_doc">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Documento de identificação do cônjuge</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="conjuge_doc" style="display:none" accept="image/*,.pdf">
+              </div>
+            </div>
+            <div class="sub-label conjuge-certidoes-label" style="display:none;">Certidões do cônjuge (co-outorgante)</div>
+            <div class="dossie conjuge-certidoes-container" style="display:none;"></div>
+          </div>
+          <div class="certidoes-pessoais-bloco">
+            <div class="sub-label">Certidões deste outorgante</div>
+            <div class="dossie">
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="certidao_debitos_trabalhistas">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Certidão de Débitos Trabalhistas</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="certidao_debitos_trabalhistas" style="display:none" accept="image/*,.pdf">
+              </div>
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="certidao_feitos_1_distribuidor">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Feitos Ajuizados — 1º Distribuidor</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="certidao_feitos_1_distribuidor" style="display:none" accept="image/*,.pdf">
+              </div>
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="certidao_feitos_2_distribuidor">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Feitos Ajuizados — 2º Distribuidor</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="certidao_feitos_2_distribuidor" style="display:none" accept="image/*,.pdf">
+              </div>
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="certidao_feitos_trt">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Feitos Ajuizados — TRT</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="certidao_feitos_trt" style="display:none" accept="image/*,.pdf">
+              </div>
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="certidao_feitos_trf">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Feitos Ajuizados — TRF</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="certidao_feitos_trf" style="display:none" accept="image/*,.pdf">
+              </div>
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="certidao_tributos_federais">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Tributos Federais</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="certidao_tributos_federais" style="display:none" accept="image/*,.pdf">
+              </div>
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="certidao_tributos_estaduais">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Tributos Estaduais</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="certidao_tributos_estaduais" style="display:none" accept="image/*,.pdf">
+              </div>
+            </div>
+            <div class="lista-comarca-diferente"></div>
+            <button type="button" class="btn-add-comarca" onclick="adicionarComarcaDiferente(this)">+ Adicionar comarca diferente</button>
+            <p class="micro-nota">Feitos Ajuizados (1º/2º Distribuidor e TRT) não enviados são tratados como dispensados por declaração das partes automaticamente. As demais (trabalhista, TRF, tributos federais/estaduais), se faltarem, ficam como pendência visível na conferência — você pode gerar a minuta mesmo assim, e dispensar manualmente cada uma na tela de confirmação, se for o caso. "Comarca diferente" só se aplica quando houver feitos em comarca distinta da residência.</p>
+          </div>
+        </div>
+      </div>
+      <button class="btn-add" onclick="adicionarBloco('lista-outorgantes','party-card','Outorgante')">+ Adicionar outro outorgante</button>
+
+
+      <div class="lista-repetivel" id="lista-outorgados" style="margin-top:20px;">
+        <div class="form-section party-card">
+          <div class="party-head">
+            <h3>Outorgado <span class="party-alt">(Comprador)</span></h3>
+          </div>
+          <div class="chave-row">
+            <span class="chave-lado ativo">Pessoa Física</span>
+            <div class="chave" onclick="chaveClique(this, 'pfpj')"><div class="knob"></div></div>
+            <span class="chave-lado">Pessoa Jurídica</span>
+          </div>
+          <div class="chave-row">
+            <span class="chave-lado ativo">Pessoalmente</span>
+            <div class="chave" onclick="chaveClique(this, 'proc')"><div class="knob"></div></div>
+            <span class="chave-lado">Por procuração</span>
+          </div>
+          <div class="chave-row chave-row-pdf-unico">
+            <span class="chave-lado ativo">Documentos separados</span>
+            <div class="chave chave-pdf-unico" onclick="chaveClique(this, 'pdf-unico')"><div class="knob"></div></div>
+            <span class="chave-lado">PDF único (identidade + certidões)</span>
+          </div>
+          <div class="dossie pf-doc-combinado" style="display:none;">
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="combinado">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Documento combinado <span style="color:var(--texto-sec); font-weight:400;">(RG/CNH + certidão de estado civil + comprovante + certidões negativas, tudo no mesmo arquivo)</span></div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="combinado" style="display:none" accept="image/*,.pdf">
+            </div>
+          </div>
+          <div class="dossie doc-pf">
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="doc">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Documento de identificação</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="doc" style="display:none" accept="image/*,.pdf">
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="cnh">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">CNH (opcional)</div><div class="hint">se a pessoa tiver, entra junto na qualificação</div></div>
+              </div>
+              <input type="file" data-doc="cnh" style="display:none" accept="image/*,.pdf">
+            </div>
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="estado_civil">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Certidão de estado civil</div><div class="hint">nascimento, casamento, ou casamento c/ averbação de divórcio</div></div>
+              </div>
+              <input type="file" data-doc="estado_civil" style="display:none" accept="image/*,.pdf">
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="comprovante">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Comprovante de residência</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="comprovante" style="display:none" accept="image/*,.pdf">
+            </div>
+          </div>
+          <div class="dossie doc-pj" style="display:none;">
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="contrato">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Contrato Social ou Estatuto</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="contrato" style="display:none" accept="image/*,.pdf">
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="simplificada">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Certidão Simplificada (Junta Comercial)</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="simplificada" style="display:none" accept="image/*,.pdf">
+            </div>
+            <div class="doc-par">
+              <div class="dossie-slot" data-doc="representante">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Documento de identificação do representante legal</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="representante" style="display:none" accept="image/*,.pdf">
+            </div>
+          </div>
+          <div class="dossie">
+            <div class="doc-par">
+              <div class="dossie-slot proc-slot" data-doc="procuracao" style="display:none;">
+                <div class="icon">+</div>
+                <div class="info"><div class="tab">Procuração</div><div class="hint">enviar arquivo</div></div>
+              </div>
+              <input type="file" data-doc="procuracao" style="display:none" accept="image/*,.pdf">
+            </div>
+          </div>
+          <div class="conjuge-participacao-bloco conjuge-bloco-pf">
+            <div class="sub-label">Participação do cônjuge (se for casado(a))</div>
+            <select class="select-tipo-ato conjuge-participacao-select" onchange="conjugeParticipacaoMudou(this)">
+              <option value="so_qualifica">Só qualifica (não assina)</option>
+              <option value="outorga_tambem">Cônjuge também outorga (co-vendedor/co-comprador)</option>
+              <option value="anui">Cônjuge apenas anui (consente, não é parte)</option>
+            </select>
+            <div class="chave-row chave-row-conjuge-pdf-unico" style="display:none;">
+              <span class="chave-lado ativo">Documentos separados</span>
+              <div class="chave chave-conjuge-pdf-unico" onclick="chaveClique(this, 'conjuge-pdf-unico')"><div class="knob"></div></div>
+              <span class="chave-lado">PDF único (identidade + certidões)</span>
+            </div>
+            <div class="dossie conjuge-doc-combinado" style="display:none; margin-top:10px;">
+              <div class="doc-par">
+                <div class="dossie-slot" data-doc="conjuge_combinado">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Documento combinado do cônjuge <span style="color:var(--texto-sec); font-weight:400;">(identidade + as 7 certidões, tudo no mesmo arquivo)</span></div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="conjuge_combinado" style="display:none" accept="image/*,.pdf">
+              </div>
+            </div>
+            <div class="dossie" style="margin-top:10px;">
+              <div class="doc-par conjuge-doc-par" style="display:none;">
+                <div class="dossie-slot" data-doc="conjuge_doc">
+                  <div class="icon">+</div>
+                  <div class="info"><div class="tab">Documento de identificação do cônjuge</div><div class="hint">enviar arquivo</div></div>
+                </div>
+                <input type="file" data-doc="conjuge_doc" style="display:none" accept="image/*,.pdf">
+              </div>
+            </div>
+            <div class="sub-label conjuge-certidoes-label" style="display:none;">Certidões do cônjuge (co-outorgante)</div>
+            <div class="dossie conjuge-certidoes-container" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-add" onclick="adicionarBloco('lista-outorgados','party-card','Outorgado')">+ Adicionar outro outorgado</button>
+
+      <div class="lista-repetivel" id="lista-imoveis" style="margin-top:20px;">
+        <div class="form-section imovel-card">
+          <h3>Imóvel</h3>
+          <div class="chave-row">
+            <span class="chave-lado ativo">Documentos separados</span>
+            <div class="chave" id="chave-imovel-combinado" onclick="chaveClique(this, 'imovel-combinado')"><div class="knob"></div></div>
+            <span class="chave-lado">Documento combinado (1 arquivo)</span>
+          </div>
+          <div class="dossie" id="imovel-docs-separados">
+            <div class="dossie-slot" id="slot-imovel-matricula" onclick="document.getElementById('input-imovel-matricula').click()">
+              <div class="icon">+</div>
+              <div class="info"><div class="tab">Matrícula (Inteiro Teor) <span style="color:var(--texto-sec); font-weight:400;">(obrigatória · 30 dias)</span></div><div class="hint">enviar arquivo</div></div>
+            </div>
+            <input type="file" id="input-imovel-matricula" style="display:none" accept="image/*,.pdf">
+            <div class="dossie-slot opcional" id="slot-imovel-onus" onclick="document.getElementById('input-imovel-onus').click()">
+              <div class="icon">+</div>
+              <div class="info"><div class="tab">Certidão de Ônus <span style="color:var(--texto-sec); font-weight:400;">(se emitida separada da matrícula)</span></div><div class="hint">enviar arquivo</div></div>
+            </div>
+            <input type="file" id="input-imovel-onus" style="display:none" accept="image/*,.pdf">
+            <div class="dossie-slot opcional" id="slot-imovel-certidao-municipal" onclick="document.getElementById('input-imovel-certidao-municipal').click()">
+              <div class="icon">+</div>
+              <div class="info"><div class="tab">Certidão de IPTU (Tributos Municipais)</div><div class="hint">enviar arquivo</div></div>
+            </div>
+            <input type="file" id="input-imovel-certidao-municipal" style="display:none" accept="image/*,.pdf">
+          </div>
+          <div class="dossie" id="imovel-doc-combinado" style="display:none;">
+            <div class="dossie-slot" id="slot-imovel-combinado" onclick="document.getElementById('input-imovel-combinado').click()">
+              <div class="icon">+</div>
+              <div class="info"><div class="tab">Documento combinado <span style="color:var(--texto-sec); font-weight:400;">(Inteiro Teor + Ônus + Certidão de IPTU, tudo no mesmo arquivo)</span></div><div class="hint">enviar arquivo</div></div>
+            </div>
+            <input type="file" id="input-imovel-combinado" style="display:none" accept="image/*,.pdf">
+          </div>
+        </div>
+      </div>
+      <button class="btn-add" onclick="adicionarBloco('lista-imoveis','imovel-card','Imóvel')">+ Adicionar outro imóvel</button>
+
+      <div id="docs-erro" style="display:none; color:#DC5B5B; font-size:13px; margin-top:10px;"></div>
+      <div class="actions" style="margin-top:20px;">
+        <button class="btn-link" onclick="irPasso('tipo')">← Voltar</button>
+        <button class="btn-ghost" id="btn-continuar-docs" onclick="processarDocumentos()">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASSO 3: CONFIRMAÇÃO -->
+    <div class="content passo" id="passo-conf" style="display:none;">
+
+      <div id="conf-outorgantes-container"></div>
+      <div id="conf-outorgados-container"></div>
+
+      <div class="form-section">
+        <h3>Imóvel</h3>
+        <div class="form-grid">
+          <div class="field" style="grid-column: span 2;"><label>Endereço</label><input id="conf-imovel-endereco"></div>
+          <div class="field destaque"><label>Matrícula nº</label><input class="mono" id="conf-imovel-matricula"></div>
+          <div class="field"><label>Área</label><input id="conf-imovel-area"></div>
+          <div class="field"><label>Comarca</label><input id="conf-imovel-comarca"></div>
+          <div class="field"><label>Circunscrição</label><input class="mono" id="conf-imovel-circunscricao"></div>
+        </div>
+        <p class="micro-nota">Circunscrição é relevante em comarcas com mais de um Serviço de Registro de Imóveis.</p>
+        <div class="sub-label" style="margin-top:12px;">Certidões do imóvel</div>
+        <div id="conf-imovel-cert-status" class="cert-status-lista"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Dados do Ato</h3>
+        <div class="form-grid">
+          <div class="field"><label>Número de ordem (Livro Protocolo Geral)</label><input class="mono" id="conf-ordem-lavratura" placeholder="1234"></div>
+          <div class="field"><label>Data da lavratura</label><input id="conf-data-lavratura" placeholder="25 de agosto de 2026"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Valor e Forma de Pagamento</h3>
+        <div class="form-grid">
+          <div class="field destaque" style="grid-column: span 2;"><label>Valor da transação (R$)</label><input class="mono" id="conf-valor" oninput="atualizarValorExtenso()" placeholder="0,00" autocomplete="off"></div>
+          <div class="field">
+            <label>Fração vendida</label>
+            <select class="select-tipo-ato" id="conf-fracao-vendida">
+              <option value="totalidade">Totalidade do imóvel</option>
+              <option value="fracao">Fração ideal específica</option>
+            </select>
+          </div>
+          <div class="field" id="conf-fracao-especifica-wrap" style="display:none;">
+            <label>Qual fração?</label>
+            <input id="conf-fracao-especifica" placeholder="ex: 1/2 (metade ideal)">
+          </div>
+        </div>
+        <p class="micro-nota" id="conf-valor-extenso" style="color:var(--verde-sinal);"></p>
+        <div class="chave-row">
+          <span class="chave-lado ativo">Pago anteriormente em espécie</span>
+          <div class="chave" id="chave-pago-no-ato" onclick="chaveClique(this, 'forma-pagamento')"><div class="knob"></div></div>
+          <span class="chave-lado">Pago neste ato</span>
+        </div>
+        <div id="parcelas-container" style="display:none; margin-top:12px;">
+          <div id="parcelas-lista" style="display:flex; flex-direction:column; gap:10px;"></div>
+          <button type="button" class="btn-add" onclick="adicionarParcela()" style="margin-top:10px;">+ Adicionar parcela</button>
+          <p class="micro-nota">Cada parcela pode ser criada em branco e completada depois, na finalização (ex: quando o cliente só passa os dados bancários no fechamento). A quitação é individual por parcela, mais a quitação geral ao final.</p>
+        </div>
+        <p class="micro-nota">Este campo não vem de documento — é preenchido manualmente, conforme o combinado entre as partes. Financiamento com alienação fiduciária fica para uma fase futura do produto.</p>
+      </div>
+
+      <div class="alert-box" id="conf-alert-box" style="display:none;">
+        <div class="alert-title">⚠ Pontos de atenção</div>
+        <ul id="conf-alert-lista"></ul>
+      </div>
+
+      <div id="gerar-erro" style="display:none; color:#DC5B5B; font-size:13px; margin-top:8px;"></div>
+      <div class="actions">
+        <button class="btn-link" onclick="irPasso('docs')">← Voltar</button>
+        <button class="btn-ghost" id="btn-gerar-minuta" onclick="gerarMinutaFinal()">Gerar minuta →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SHELL (configurações) ===================== -->
+<div class="shell" id="shell-config">
+  <div class="sidebar">
+    <div class="brand">
+      <svg class="selo-mark-small" viewBox="0 0 60 92" fill="none" role="img" aria-label="Copiloto Notarial">
+        <rect x="8" y="4" width="44" height="84" rx="7" fill="#102A43"/>
+        <polygon points="38,4 52,4 52,18" fill="#B69A62"/>
+        <rect x="20" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <rect x="36" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <polygon points="20,34 28,34 44,72 36,72" fill="#F5F2EA"/>
+      </svg>
+      <span class="wordmark">Copiloto Notarial</span>
+    </div>
+    <nav>
+      <a onclick="mostrar('dash')"><span class="dot"></span> Área de trabalho</a>
+      <a onclick="mostrar('fluxo')"><span class="dot"></span> Nova minuta</a>
+      <a onclick="mostrar('analista')"><span class="dot"></span> Analista de Matrícula</a>
+      <a class="disabled"><span class="dot"></span> Histórico</a>
+      <a onclick="mostrar('roadmap')"><span class="dot"></span> Implementação</a>
+      <a class="active"><span class="dot"></span> Configurações</a>
+    </nav>
+    <div class="user-box">
+      <div class="nome">João Silva</div>
+      <span class="cartorio-usuario">1º Tabelionato de Catanduva</span><br>
+      <a href="#" onclick="sair(); return false;">Sair</a>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="content">
+      <h1 style="font-size:22px; margin:0 0 24px;">Configurações</h1>
+
+      <div class="form-section">
+        <h3>Perfil e Cartório</h3>
+        <div class="form-grid">
+          <div class="field" style="grid-column: span 2;"><label>Nome do cartório (exibição)</label><input id="perfil-cartorio-nome" placeholder="8º Tabelionato de Notas de Curitiba/PR"></div>
+          <div class="field" style="grid-column: span 2;"><label>Nome do tabelião</label><input id="perfil-tabeliao-nome"></div>
+          <div class="field" style="grid-column: span 2;"><label>Cargo</label><input id="perfil-tabeliao-cargo" placeholder="Tabeliã(o) de Notas"></div>
+          <div class="field"><label>Número do Tabelionato</label><input class="mono" id="perfil-cartorio-numero" placeholder="8"></div>
+          <div class="field"><label>Cidade</label><input id="perfil-cartorio-cidade" placeholder="Curitiba"></div>
+          <div class="field" style="grid-column: span 2;"><label>Estado (por extenso, como vai no preâmbulo)</label><input id="perfil-cartorio-uf" placeholder="Capital do Estado do Paraná"></div>
+          <div class="field"><label>Comarca</label><input id="perfil-comarca" placeholder="Curitiba/PR"></div>
+          <div class="field"><label>CNS</label><input class="mono" id="perfil-cns"></div>
+        </div>
+        <p class="micro-nota">"Nome do cartório" aparece na barra lateral. Os demais campos preenchem automaticamente o preâmbulo de toda minuta gerada — preenche uma vez aqui, não precisa mais digitar a cada minuta.</p>
+        <div id="perfil-msg" style="font-size:13px; margin-top:8px;"></div>
+        <button class="btn-primary" style="margin-top:8px; width:auto; padding:10px 24px;" onclick="salvarPerfil()">Salvar perfil</button>
+      </div>
+
+      <div class="form-section">
+        <h3>Modelos de minuta</h3>
+        <div class="subtabs">
+          <button class="subtab ativo" onclick="mostrarSubtab(this,'biblioteca')">Biblioteca de itens</button>
+          <button class="subtab" onclick="mostrarSubtab(this,'composicao')">Composição por tipo de ato</button>
+        </div>
+
+        <!-- BIBLIOTECA DE ITENS -->
+        <div class="subtab-painel" id="subtab-biblioteca">
+          <select class="select-tipo-ato" id="select-modelo-biblioteca" style="margin-bottom:14px;" onchange="carregarBiblioteca()"></select>
+          <p class="micro-nota" style="margin: -8px 0 14px;">Os itens abaixo pertencem só a este modelo — editar aqui não afeta nenhum outro tipo de ato, mesmo que o texto comece parecido.</p>
+          <div class="dossie" id="lista-biblioteca-itens"></div>
+          <button class="btn-add" style="margin-top:10px;" onclick="abrirNovoItem()">+ Adicionar item novo</button>
+        </div>
+
+        <!-- COMPOSIÇÃO POR TIPO DE ATO -->
+        <div class="subtab-painel" id="subtab-composicao" style="display:none;">
+          <select class="select-tipo-ato" id="select-modelo-composicao" style="margin-bottom:14px;" onchange="carregarComposicao()"></select>
+          <p class="micro-nota" style="margin: -8px 0 14px;">PF e PJ usam a mesma composição de itens — a diferença fica nas variantes condicionais de cada item, não em minutas separadas.</p>
+          <div class="composicao-lista" id="lista-composicao"></div>
+        </div>
+
+        <div id="modelos-msg" style="font-size:13px; margin-top:12px;"></div>
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <input type="text" id="novo-modelo-nome" placeholder="Nome do novo tipo de ato (ex: Doação Plena)" style="flex:1; padding:10px 12px; border:1px solid #D9D7D0; border-radius:6px; background:#FFFFFF; color:var(--bruma);">
+          <button class="btn-primary" style="white-space:nowrap;" onclick="criarNovoModelo()">+ Criar modelo novo</button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Meu modelo de minuta (.docx)</h3>
+        <p class="micro-nota" style="margin: -4px 0 14px;">
+          Alternativa à Biblioteca de itens acima: suba seu próprio arquivo Word, escrito com suas
+          tags «palavra:1»/«palavra:2»/«palavra:4» (concordância) e «&lt;NOME_DA_VARIÁVEL&gt;» (dado) —
+          o sistema resolve tudo sozinho, preservando negrito e formatação. Não precisa configurar
+          item nenhum.
+        </p>
+        <div id="lista-modelos-docx" style="margin-bottom:14px;"></div>
+        <p class="micro-nota" style="margin: -8px 0 10px;">O nome do modelo tem que ser <strong>exatamente</strong> um dos tipos de ato do Passo 1 — por isso o campo é uma lista fixa, não texto livre: assim o arquivo salvo aqui sempre bate com o que o sistema procura na hora de gerar a minuta.</p>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <select class="select-tipo-ato" id="novo-modelo-docx-nome" style="flex:1 1 220px; min-width:220px;">
+            <optgroup label="Compra, venda e doação — outorgante / outorgado">
+              <option value="compra_e_venda_a_vista">Compra e Venda à Vista</option>
+              <option value="compra_e_venda_a_vista_pj">Compra e Venda à Vista — Vendedor Pessoa Jurídica</option>
+              <option value="compra_e_venda_clausula_resolutiva">Compra e Venda com Cláusula Resolutiva</option>
+              <option value="doacao_plena">Doação Plena</option>
+              <option value="doacao_reserva_usufruto">Doação com Reserva de Usufruto</option>
+              <option value="dacao_em_pagamento">Dação em Pagamento</option>
+            </optgroup>
+            <optgroup label="Inventário e renúncias — sempre pessoa física">
+              <option value="inventario_partilha_bem">Inventário com Partilha de Bem</option>
+              <option value="inventario_adjudicacao_bem">Inventário com Adjudicação de Bem</option>
+              <option value="nomeacao_inventariante">Nomeação de Inventariante</option>
+              <option value="renuncia_direitos_hereditarios">Renúncia de Direitos Hereditários</option>
+              <option value="renuncia_usufruto">Renúncia de Usufruto</option>
+            </optgroup>
+          </select>
+          <input type="file" id="novo-modelo-docx-arquivo" accept=".docx" style="display:none" onchange="atualizarNomeArquivoModeloDocx()">
+          <button class="btn-ghost" style="flex-shrink:0;" onclick="document.getElementById('novo-modelo-docx-arquivo').click()">Escolher arquivo</button>
+          <span id="novo-modelo-docx-arquivo-nome" style="font-size:13px; color:var(--texto-sec); flex-shrink:0;"></span>
+          <button class="btn-primary" style="white-space:nowrap; flex-shrink:0;" onclick="enviarModeloDocx()">Enviar</button>
+        </div>
+        <div id="modelos-docx-msg" style="font-size:13px; margin-top:10px;"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Documentos e dispensas</h3>
+        <div class="dossie">
+          <div class="dossie-slot preenchido">
+            <div class="icon">✓</div>
+            <div class="info"><div class="tab">Compra e Venda — PF</div><div class="hint">8 documentos · 4 cláusulas de dispensa configuradas</div></div>
+            <div class="acao">gerenciar</div>
+          </div>
+          <div class="dossie-slot">
+            <div class="icon">+</div>
+            <div class="info"><div class="tab">Outros tipos de ato</div><div class="hint">ainda não configurados</div></div>
+          </div>
+        </div>
+        <p class="micro-nota">Define, por tipo de ato, quais documentos são exigidos e o texto de cada cláusula de dispensa quando um documento não é apresentado.</p>
+      </div>
+
+      <div class="form-section">
+        <h3>Usuários</h3>
+        <table>
+          <thead><tr><td>Nome</td><td>Papel</td><td>Status</td><td></td></tr></thead>
+          <tbody id="tabela-usuarios-corpo"><tr><td colspan="4" class="sec">Carregando...</td></tr></tbody>
+        </table>
+        <p class="micro-nota">Adicione outro login se mais alguém do cartório for usar o sistema.</p>
+        <div id="form-add-usuario" style="display:none; margin-top:14px; padding-top:14px; border-top:1px solid #D9D7D0;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="novo-usuario-nome" placeholder="Nome completo" style="flex:1 1 180px; min-width:160px; padding:10px 12px; border:1px solid #D9D7D0; border-radius:6px; background:#FFFFFF; color:var(--bruma);">
+            <input type="text" id="novo-usuario-login" placeholder="Login (usuário)" style="flex:1 1 140px; min-width:120px; padding:10px 12px; border:1px solid #D9D7D0; border-radius:6px; background:#FFFFFF; color:var(--bruma);">
+            <input type="password" id="novo-usuario-senha" placeholder="Senha" style="flex:1 1 140px; min-width:120px; padding:10px 12px; border:1px solid #D9D7D0; border-radius:6px; background:#FFFFFF; color:var(--bruma);">
+            <button class="btn-primary" style="white-space:nowrap; flex-shrink:0;" onclick="criarUsuarioAdmin()">+ Adicionar usuário</button>
+          </div>
+          <div id="novo-usuario-msg" style="font-size:13px; margin-top:8px;"></div>
+        </div>
+      </div>
+
+      <div class="form-section" style="opacity:0.6;">
+        <h3>Privacidade e dados <span class="party-alt">(em breve)</span></h3>
+        <p class="micro-nota">Política de retenção e descarte dos documentos enviados. Reservado para quando o produto passar a ser usado por outros cartórios — por ora os documentos ficam apenas no seu ambiente.</p>
+      </div>
+
+      <div class="form-section" style="opacity:0.6;">
+        <h3>IA <span class="party-alt">(avançado)</span></h3>
+        <div class="form-grid">
+          <div class="field"><label>Modelo padrão (extração e geração)</label><input value="Claude Sonnet 5" disabled></div>
+          <div class="field"><label>Modelo para análise de matrícula</label><input value="Claude Opus 4.8" disabled></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SHELL (analista de matrícula) ===================== -->
+<div class="shell" id="shell-analista">
+  <div class="sidebar">
+    <div class="brand">
+      <svg class="selo-mark-small" viewBox="0 0 60 92" fill="none" role="img" aria-label="Copiloto Notarial">
+        <rect x="8" y="4" width="44" height="84" rx="7" fill="#102A43"/>
+        <polygon points="38,4 52,4 52,18" fill="#B69A62"/>
+        <rect x="20" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <rect x="36" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <polygon points="20,34 28,34 44,72 36,72" fill="#F5F2EA"/>
+      </svg>
+      <span class="wordmark">Copiloto Notarial</span>
+    </div>
+    <nav>
+      <a onclick="mostrar('dash')"><span class="dot"></span> Área de trabalho</a>
+      <a onclick="mostrar('fluxo')"><span class="dot"></span> Nova minuta</a>
+      <a class="active"><span class="dot"></span> Analista de Matrícula</a>
+      <a class="disabled"><span class="dot"></span> Histórico</a>
+      <a onclick="mostrar('roadmap')"><span class="dot"></span> Implementação</a>
+      <a onclick="mostrar('config')"><span class="dot"></span> Configurações</a>
+    </nav>
+    <div class="user-box">
+      <div class="nome">João Silva</div>
+      <span class="cartorio-usuario">1º Tabelionato de Catanduva</span><br>
+      <a href="#" onclick="sair(); return false;">Sair</a>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="content">
+      <h1 style="font-size:22px; margin:0 0 4px;">🔍 Analista de Matrícula</h1>
+      <p class="micro-nota" style="margin:0 0 22px;">Envie uma matrícula e receba a situação jurídica atualizada, sem precisar estar no meio de uma minuta.</p>
+
+      <div class="form-section">
+        <h3>Documento</h3>
+        <div class="dossie">
+          <div class="dossie-slot" id="slot-analista-matricula" onclick="document.getElementById('input-analista-matricula').click()">
+            <div class="icon">+</div>
+            <div class="info"><div class="tab">Certidão de matrícula</div><div class="hint">enviar arquivo</div></div>
+          </div>
+          <input type="file" id="input-analista-matricula" style="display:none" accept="image/*,.pdf">
+        </div>
+        <div id="analista-erro" style="display:none; color:#DC5B5B; font-size:13px; margin-top:10px;"></div>
+        <div class="actions" style="margin-top:16px;">
+          <button class="btn-ghost" id="btn-analisar-matricula" onclick="analisarMatricula()">Analisar matrícula →</button>
+        </div>
+      </div>
+
+      <div id="analista-resultado" style="display:none;"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SHELL (implementacao / roadmap) ===================== -->
+<div class="shell" id="shell-roadmap">
+  <div class="sidebar">
+    <div class="brand">
+      <svg class="selo-mark-small" viewBox="0 0 60 92" fill="none" role="img" aria-label="Copiloto Notarial">
+        <rect x="8" y="4" width="44" height="84" rx="7" fill="#102A43"/>
+        <polygon points="38,4 52,4 52,18" fill="#B69A62"/>
+        <rect x="20" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <rect x="36" y="34" width="8" height="38" fill="#F5F2EA"/>
+        <polygon points="20,34 28,34 44,72 36,72" fill="#F5F2EA"/>
+      </svg>
+      <span class="wordmark">Copiloto Notarial</span>
+    </div>
+    <nav>
+      <a onclick="mostrar('dash')"><span class="dot"></span> Área de trabalho</a>
+      <a onclick="mostrar('fluxo')"><span class="dot"></span> Nova minuta</a>
+      <a onclick="mostrar('analista')"><span class="dot"></span> Analista de Matrícula</a>
+      <a class="disabled"><span class="dot"></span> Histórico</a>
+      <a class="active"><span class="dot"></span> Implementação</a>
+      <a onclick="mostrar('config')"><span class="dot"></span> Configurações</a>
+    </nav>
+    <div class="user-box">
+      <div class="nome">João Silva</div>
+      <span class="cartorio-usuario">1º Tabelionato de Catanduva</span><br>
+      <a href="#" onclick="sair(); return false;">Sair</a>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="content">
+      <h1 style="font-size:22px; margin:0 0 4px;">🚧 Implementação</h1>
+      <p class="micro-nota" style="margin:0 0 22px;">O que já está pronto, e o que já estamos construindo pra frente.</p>
+
+      <div class="form-section">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <h3 style="margin:0;">Privacidade e Proteção de Dados (LGPD)</h3>
+          <span class="chip-pendente" style="border-color:var(--verde-sinal); color:var(--verde-sinal);">em desenvolvimento</span>
+        </div>
+        <p class="micro-nota" style="margin:0;">
+          Já estamos trabalhando na política formal de retenção e descarte dos documentos enviados
+          (RG, matrícula, certidões), consentimento explícito de tratamento de dados, e criptografia
+          de ponta a ponta — seguindo o mesmo padrão de conformidade LGPD que já existe hoje na
+          própria API usada para a extração (dados não são usados para treinar modelo e têm retenção
+          limitada por padrão).
+        </p>
+      </div>
+
+      <div class="form-section">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <h3 style="margin:0;">Emissão automática de certidões fiscais</h3>
+          <span class="chip-pendente" style="border-color:var(--verde-sinal); color:var(--verde-sinal);">em desenvolvimento</span>
+        </div>
+        <p class="micro-nota" style="margin:0;">
+          Já estamos trabalhando para que o sistema busque automaticamente as certidões (Receita
+          Federal, Fazenda Estadual, Tributos Municipais, Justiça do Trabalho) direto nos portais
+          oficiais — eliminando a necessidade de baixar cada uma manualmente antes de subir no
+          Copiloto Notarial.
+        </p>
+      </div>
+
+      <div class="form-section" style="opacity:0.65;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <h3 style="margin:0;">Financiamento com alienação fiduciária</h3>
+          <span class="chip-pendente">planejado</span>
+        </div>
+        <p class="micro-nota" style="margin:0;">
+          Suporte a compra e venda financiada, com a cláusula de alienação fiduciária em garantia —
+          reservado para uma fase futura, depois que o fluxo de pagamento à vista estiver
+          validado no dia a dia.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MOMENTO DO SELO DIGITAL ===================== -->
+<div id="selo-overlay">
+  <div class="selo-caixa">
+    <div class="selo-anel"></div>
+    <div class="selo-anel interno"></div>
+    <div class="selo-scan" id="selo-scan"></div>
+    <div class="selo-check" id="selo-check">
+      <div class="ring">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 12.5L9.5 18L20 6.5" stroke="#174A5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="txt">Autenticado</div>
+    </div>
+  </div>
+  <div class="selo-msg" id="selo-msg">Minuta pronta para conferência final.</div>
+  <button class="selo-download" id="selo-download">Baixar minuta (.docx)</button>
+  <button class="selo-fechar" id="selo-fechar" onclick="fecharSelo()">Voltar</button>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// CONEXAO COM A API REAL (backend/main.py) -- substitui o dado de mentira
+// que o mockup usava por chamada de verdade pro motor Python.
+// ---------------------------------------------------------------------------
+let sessaoUsuario = null;
+let tokenSessao = null;
+
+// Toda chamada pra API que precisa de login passa por aqui, que ja'
+// inclui o token automaticamente. Se a sessao tiver expirado (ou nunca
+// tiver existido), a API responde 401 e a gente manda a pessoa de volta
+// pro login, em vez de deixar a tela travada sem explicar nada.
+async function sair() {
+  if (tokenSessao) {
+    try {
+      await fetch('/api/logout', { method: 'POST', headers: { 'Authorization': 'Bearer ' + tokenSessao } });
+    } catch (e) { /* mesmo se a chamada falhar, ainda assim limpa a sessao local */ }
+  }
+  tokenSessao = null;
+  sessaoUsuario = null;
+  sessionStorage.removeItem('copiloto_token');
+  sessionStorage.removeItem('copiloto_usuario');
+  mostrar('login');
+}
+
+async function fetchAutenticado(url, opcoes = {}) {
+  opcoes.headers = opcoes.headers || {};
+  if (tokenSessao) opcoes.headers['Authorization'] = 'Bearer ' + tokenSessao;
+  const resp = await fetch(url, opcoes);
+  if (resp.status === 401) {
+    tokenSessao = null;
+    sessaoUsuario = null;
+    sessionStorage.removeItem('copiloto_token');
+    sessionStorage.removeItem('copiloto_usuario');
+    mostrar('login');
+    const erroLogin = document.getElementById('login-erro');
+    if (erroLogin) {
+      erroLogin.textContent = 'Sua sessão expirou — entre novamente.';
+      erroLogin.style.display = 'block';
+    }
+  }
+  return resp;
+}
+
+function _entrarNaSessao(usuario, token) {
+  sessaoUsuario = usuario;
+  tokenSessao = token;
+  sessionStorage.setItem('copiloto_token', token);
+  sessionStorage.setItem('copiloto_usuario', JSON.stringify(usuario));
+  document.querySelectorAll('.user-box .nome').forEach(el => {
+    el.textContent = sessaoUsuario.nome_completo || sessaoUsuario.username;
+  });
+  document.querySelectorAll('.user-box .cartorio-usuario').forEach(el => {
+    el.textContent = sessaoUsuario.cartorio || '';
+  });
+  atualizarCartorioNaSidebar();
+  carregarListaModelos();
+  carregarPerfil();
+  carregarModelosDocx();
+  carregarUsuarios();
+}
+
+// Ao carregar a pagina (inclusive apos F5), tenta recuperar a sessao do
+// sessionStorage antes de mostrar a tela de login -- resolve o problema
+// de F5 derrubar a sessao no meio de uma minuta longa. Some sozinho se
+// fechar a aba/navegador (sessionStorage, nao localStorage), e continua
+// invalidando normalmente se o token tiver expirado no servidor (a
+// primeira chamada autenticada que der 401 desloga de qualquer jeito).
+async function tentarRestaurarSessao() {
+  const tokenSalvo = sessionStorage.getItem('copiloto_token');
+  const usuarioSalvo = sessionStorage.getItem('copiloto_usuario');
+  if (!tokenSalvo || !usuarioSalvo) return false;
+  tokenSessao = tokenSalvo;
+  sessaoUsuario = JSON.parse(usuarioSalvo);
+  _entrarNaSessao(sessaoUsuario, tokenSessao);
+  mostrar('dash');
+  return true;
+}
+
+async function fazerLogin() {
+  const usuario = document.getElementById('login-usuario').value;
+  const senha = document.getElementById('login-senha').value;
+  const erroEl = document.getElementById('login-erro');
+  erroEl.style.display = 'none';
+
+  const btn = document.getElementById('btn-entrar');
+  const textoOriginal = btn.textContent;
+  btn.textContent = 'Entrando...';
+  btn.disabled = true;
+
+  try {
+    const form = new FormData();
+    form.append('username', usuario);
+    form.append('senha', senha);
+    const resp = await fetch('/api/login', { method: 'POST', body: form });
+    const dados = await resp.json();
+
+    if (resp.ok) {
+      _entrarNaSessao(dados.usuario, dados.token);
+      mostrar('dash');
+    } else {
+      erroEl.textContent = dados.detail || 'Erro ao entrar.';
+      erroEl.style.display = 'block';
+    }
+  } catch (e) {
+    erroEl.textContent = 'Não foi possível conectar ao servidor. Confira se a API está rodando.';
+    erroEl.style.display = 'block';
+  } finally {
+    btn.textContent = textoOriginal;
+    btn.disabled = false;
+  }
+}
+
+function toggleCriarConta() {
+  const formEl = document.getElementById('criar-conta-form');
+  formEl.style.display = formEl.style.display === 'none' ? 'block' : 'none';
+}
+
+async function criarConta() {
+  const nome = document.getElementById('cc-nome').value;
+  const cartorio = document.getElementById('cc-cartorio').value;
+  const usuario = document.getElementById('cc-usuario').value;
+  const senha = document.getElementById('cc-senha').value;
+  const msgEl = document.getElementById('criar-conta-msg');
+
+  const form = new FormData();
+  form.append('nome', nome);
+  form.append('cartorio', cartorio);
+  form.append('username', usuario);
+  form.append('senha', senha);
+
+  try {
+    const resp = await fetch('/api/criar-conta', { method: 'POST', body: form });
+    const dados = await resp.json();
+    if (resp.ok) {
+      msgEl.style.color = 'var(--verde-sinal)';
+      msgEl.textContent = 'Conta criada! Pode entrar agora ali em cima.';
+    } else {
+      msgEl.style.color = '#DC5B5B';
+      msgEl.textContent = dados.detail || 'Erro ao criar conta.';
+    }
+  } catch (e) {
+    msgEl.style.color = '#DC5B5B';
+    msgEl.textContent = 'Não foi possível conectar ao servidor.';
+  }
+}
+
+function mostrar(tela, btn) {
+  document.getElementById('login-screen').style.display = tela === 'login' ? 'flex' : 'none';
+  document.getElementById('shell-dash').classList.toggle('visible', tela === 'dash');
+  document.getElementById('shell-fluxo').classList.toggle('visible', tela === 'fluxo');
+  document.getElementById('shell-config').classList.toggle('visible', tela === 'config');
+  document.getElementById('shell-analista').classList.toggle('visible', tela === 'analista');
+  document.getElementById('shell-roadmap').classList.toggle('visible', tela === 'roadmap');
+  if (tela === 'dash') carregarEstatisticas();
+}
+
+async function carregarEstatisticas() {
+  try {
+    const resp = await fetchAutenticado('/api/estatisticas');
+    const d = await resp.json();
+
+    const nomeMes = new Date().toLocaleDateString('pt-BR', { month: 'long' });
+    document.getElementById('stat-label-mes').textContent = `Minutas geradas — ${nomeMes}`;
+    document.getElementById('stat-mes').textContent = d.minutas_geradas_mes;
+    document.getElementById('stat-total').textContent = d.minutas_geradas_total;
+
+    const corpo = document.getElementById('tabela-atividade-recente');
+    if (d.atividade_recente.length === 0) {
+      document.getElementById('stat-ultima').textContent = '—';
+      corpo.innerHTML = '<tr><td colspan="4" class="sec">Nenhuma minuta gerada ainda.</td></tr>';
+      return;
+    }
+
+    const dataUltima = new Date(d.atividade_recente[0].gerada_em);
+    document.getElementById('stat-ultima').textContent = dataUltima.toLocaleDateString('pt-BR');
+
+    corpo.innerHTML = d.atividade_recente.map(item => {
+      const data = new Date(item.gerada_em).toLocaleDateString('pt-BR');
+      const partes = [item.outorgante_nome, item.outorgado_nome].filter(Boolean).join(' → ');
+      return `<tr>
+        <td>${partes || '—'}</td>
+        <td class="sec">${item.tipo_ato || '—'}</td>
+        <td class="sec">${data}</td>
+        <td><span class="badge gerada">Gerada</span></td>
+      </tr>`;
+    }).join('');
+  } catch (e) { /* API pode nao estar pronta ainda no primeiro carregamento -- ignora */ }
+}
+
+function mostrarSelo() {
+  const overlay = document.getElementById('selo-overlay');
+  const scan = document.getElementById('selo-scan');
+  const check = document.getElementById('selo-check');
+  overlay.style.display = 'flex';
+  scan.classList.remove('rodando');
+  check.classList.remove('show');
+  void scan.offsetWidth;
+  scan.classList.add('rodando');
+  setTimeout(() => {
+    check.classList.add('show');
+    document.getElementById('selo-msg').classList.add('show');
+    document.getElementById('selo-download').classList.add('show');
+    document.getElementById('selo-fechar').classList.add('show');
+  }, 1000);
+}
+function fecharSelo() {
+  document.getElementById('selo-overlay').style.display = 'none';
+  document.getElementById('selo-msg').classList.remove('show');
+  document.getElementById('selo-download').classList.remove('show');
+  document.getElementById('selo-fechar').classList.remove('show');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const selectFracao = document.getElementById('conf-fracao-vendida');
+  const wrapFracaoEspecifica = document.getElementById('conf-fracao-especifica-wrap');
+  if (selectFracao && wrapFracaoEspecifica) {
+    selectFracao.addEventListener('change', () => {
+      wrapFracaoEspecifica.style.display = selectFracao.value === 'fracao' ? 'block' : 'none';
+    });
+  }
+});
+
+function irPasso(passo) {
+  document.querySelectorAll('.passo').forEach(p => p.style.display = 'none');
+  document.getElementById('passo-' + passo).style.display = 'block';
+  const ordem = { tipo: 0, docs: 1, conf: 2 };
+  document.querySelectorAll('.stepper .step').forEach((el, i) => {
+    el.classList.toggle('current', i === ordem[passo]);
+    el.classList.toggle('done', i < ordem[passo]);
+  });
+}
+
+
+function mostrarSubtab(btn, nome) {
+  btn.parentElement.querySelectorAll('.subtab').forEach(b => b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  btn.closest('.form-section').querySelectorAll('.subtab-painel').forEach(p => p.style.display = 'none');
+  document.getElementById('subtab-' + nome).style.display = 'block';
+}
+
+function chaveClique(el, alvo) {
+  el.classList.toggle('ativo');
+  const ligado = el.classList.contains('ativo');
+  const row = el.closest('.chave-row');
+  const lados = row.querySelectorAll('.chave-lado');
+  lados[0].classList.toggle('ativo', !ligado);
+  lados[1].classList.toggle('ativo', ligado);
+  if (alvo === 'proc') {
+    const slot = el.closest('.party-card').querySelector('.proc-slot');
+    if (slot) slot.style.display = ligado ? 'flex' : 'none';
+  } else if (alvo === 'pfpj' || alvo === 'pdf-unico') {
+    _atualizarVisibilidadePF(el.closest('.party-card'));
+  } else if (alvo === 'conjuge-pdf-unico') {
+    const select = el.closest('.conjuge-participacao-bloco').querySelector('.conjuge-participacao-select');
+    conjugeParticipacaoMudou(select);
+  } else if (alvo === 'imovel-combinado') {
+    document.getElementById('imovel-docs-separados').style.display = ligado ? 'none' : 'flex';
+    document.getElementById('imovel-doc-combinado').style.display = ligado ? 'flex' : 'none';
+  } else if (alvo === 'forma-pagamento') {
+    const container = document.getElementById('parcelas-container');
+    container.style.display = ligado ? 'block' : 'none';
+    // comeca sempre com 1 parcela em branco pra nao obrigar clicar em
+    // "+ Adicionar parcela" na primeira vez que liga "Pago neste ato"
+    if (ligado && document.getElementById('parcelas-lista').children.length === 0) {
+      adicionarParcela();
+    }
+  } else if (alvo) {
+    const alvoEl = el.closest('.form-section').querySelector('.' + alvo + '-campos');
+    if (alvoEl) alvoEl.style.display = ligado ? 'grid' : 'none';
+  }
+}
+
+// Decide o que mostrar no card de uma pessoa (PF/PJ x documentos
+// separados/PDF unico) -- centralizado aqui porque as duas chaves (pfpj
+// e pdf-unico) afetam os MESMOS elementos (.doc-pf), entao setar o
+// display direto em cada handler, cada um por conta propria, faria um
+// sobrescrever o outro dependendo da ordem de clique.
+function _atualizarVisibilidadePF(card) {
+  const chavePfPj = card.querySelector('.chave-row .chave'); // 1a chave-row do card = pfpj
+  const ehPJ = !!(chavePfPj && chavePfPj.classList.contains('ativo'));
+  const chavePdfUnico = card.querySelector('.chave-pdf-unico');
+
+  const docPf = card.querySelector('.doc-pf');
+  const docPj = card.querySelector('.doc-pj');
+  const blocoConjuge = card.querySelector('.conjuge-bloco-pf');
+  const blocoCertidoes = card.querySelector('.certidoes-pessoais-bloco');
+  const blocoCombinado = card.querySelector('.pf-doc-combinado');
+  const rowPdfUnico = card.querySelector('.chave-row-pdf-unico');
+
+  if (docPj) docPj.style.display = ehPJ ? 'flex' : 'none';
+  // PDF unico so' faz sentido pra PF -- some o proprio seletor quando vira
+  // PJ, e reseta o estado dele pra "separado" (senao ele ficava "ligado
+  // por baixo dos panos" e reaparecia certo do jeito errado se a pessoa
+  // voltasse pra PF depois)
+  if (rowPdfUnico) rowPdfUnico.style.display = ehPJ ? 'none' : 'flex';
+  if (ehPJ && chavePdfUnico && chavePdfUnico.classList.contains('ativo')) {
+    chavePdfUnico.classList.remove('ativo');
+    const ladosPdfUnico = rowPdfUnico.querySelectorAll('.chave-lado');
+    ladosPdfUnico[0].classList.add('ativo');
+    ladosPdfUnico[1].classList.remove('ativo');
+  }
+  const ehCombinado = !!(chavePdfUnico && chavePdfUnico.classList.contains('ativo'));
+
+  const mostrarDetalhado = !ehPJ && !ehCombinado;
+  const mostrarCombinado = !ehPJ && ehCombinado;
+
+  if (docPf) docPf.style.display = mostrarDetalhado ? 'flex' : 'none';
+  if (blocoCertidoes) blocoCertidoes.style.display = mostrarDetalhado ? 'block' : 'none';
+  if (blocoCombinado) blocoCombinado.style.display = mostrarCombinado ? 'flex' : 'none';
+
+  if (blocoConjuge) {
+    // conjuge sempre com upload proprio (nunca dentro do "documento
+    // combinado" do titular) -- so' some de vez quando vira PJ
+    blocoConjuge.style.display = ehPJ ? 'none' : 'block';
+    if (ehPJ) {
+      const select = blocoConjuge.querySelector('.conjuge-participacao-select');
+      if (select) { select.value = 'so_qualifica'; conjugeParticipacaoMudou(select); }
+    }
+  }
+}
+
+// Os mesmos 7 tipos fixos de certidao pessoal (ver TIPOS_CERTIDAO em
+// extrair_dados.py) -- gerados aqui via JS em vez de duplicar o markup
+// hardcoded 4 vezes (outorgante/outorgado x titular/conjuge).
+const TIPOS_CERTIDAO_JS = [
+  ['certidao_debitos_trabalhistas', 'Certidão de Débitos Trabalhistas'],
+  ['certidao_feitos_1_distribuidor', 'Feitos Ajuizados — 1º Distribuidor'],
+  ['certidao_feitos_2_distribuidor', 'Feitos Ajuizados — 2º Distribuidor'],
+  ['certidao_feitos_trt', 'Feitos Ajuizados — TRT'],
+  ['certidao_feitos_trf', 'Feitos Ajuizados — TRF'],
+  ['certidao_tributos_federais', 'Certidão de Tributos Federais'],
+  ['certidao_tributos_estaduais', 'Certidão de Tributos Estaduais'],
+];
+
+// Mesma regra combinada com o usuario e espelhada em
+// CERTIDOES_DISPENSAVEIS_POR_DECLARACAO (extrair_dados.py): so' essas 3
+// admitem dispensa por declaracao das partes. As outras 4 sao
+// obrigatorias -- se faltarem, viram pendencia visivel aqui na tela,
+// nao uma dispensa automatica.
+const CERTIDOES_DISPENSAVEIS_JS = new Set([
+  'feitos_1_distribuidor', 'feitos_2_distribuidor', 'feitos_trt',
+]);
+
+// Calcula o status de cada uma das 7 certidoes fixas de UMA pessoa, a
+// partir do que ja' veio da extracao (pessoa.certidoes[tipo_id] e' null
+// se nao foi enviada, ou um dict com os dados se foi). Usado tanto pra
+// desenhar a lista de status na tela de confirmacao quanto pra decidir
+// se o botao de gerar minuta deve ficar bloqueado.
+function _statusCertidoesPessoa(pessoa) {
+  const certidoes = pessoa.certidoes || {};
+  const dispensadasManualmente = pessoa.certidoes_dispensadas_manualmente || [];
+  return TIPOS_CERTIDAO_JS.map(([idComPrefixo, nome]) => {
+    const tipoId = idComPrefixo.replace(/^certidao_/, '');
+    const enviada = !!certidoes[tipoId];
+    const dispensavelAutomatico = CERTIDOES_DISPENSAVEIS_JS.has(tipoId);
+    const dispensadaManualmente = dispensadasManualmente.includes(tipoId);
+    // "pendenteObrigatoria" aqui e' so' informativo agora -- NUNCA mais
+    // bloqueia o botao de gerar minuta (ver _atualizarBloqueioGeracaoPorCertidoes).
+    // O tabeliao pode dispensar qualquer uma das 7 manualmente, com a
+    // mesma clausula de declaracao das partes que ja existe pras 3
+    // automaticas -- a decisao final e' sempre dele, nao do sistema.
+    const pendente = !enviada && !dispensavelAutomatico && !dispensadaManualmente;
+    return { tipoId, nome, enviada, dispensavelAutomatico, dispensadaManualmente, pendenteObrigatoria: pendente };
+  });
+}
+
+function _htmlStatusCertidoes(pessoa, prefixo, indice) {
+  const status = _statusCertidoesPessoa(pessoa);
+  const linhas = status.map(s => {
+    let badge, classe, acao = '';
+    if (s.enviada) {
+      badge = '✅ enviada';
+      classe = 'cert-ok';
+    } else if (s.dispensavelAutomatico) {
+      badge = 'dispensada (declaração das partes)';
+      classe = 'cert-dispensada';
+    } else if (s.dispensadaManualmente) {
+      badge = 'dispensada (declaração das partes)';
+      classe = 'cert-dispensada';
+      acao = `<button type="button" class="btn-link-cert" onclick="toggleDispensaCertidao('${prefixo}', ${indice}, '${s.tipoId}')">desfazer</button>`;
+    } else {
+      badge = '⚠️ pendente';
+      classe = 'cert-pendente';
+      acao = `<button type="button" class="btn-link-cert" onclick="toggleDispensaCertidao('${prefixo}', ${indice}, '${s.tipoId}')">dispensar</button>`;
+    }
+    return `<div class="cert-status-linha ${classe}"><span>${s.nome}</span><span>${badge}${acao}</span></div>`;
+  }).join('');
+  return linhas;
+}
+
+// true se QUALQUER certidao ainda estiver pendente (nem enviada, nem
+// dispensada) em QUALQUER outorgante -- so' usado agora pra mostrar o
+// AVISO informativo, NUNCA mais pra desabilitar o botao de gerar minuta.
+function _existePendenciaObrigatoriaCertidoes(outorgantes, outorgados) {
+  return [...outorgantes, ...outorgados].some(
+    pessoa => _statusCertidoesPessoa(pessoa).some(s => s.pendenteObrigatoria)
+  );
+}
+
+function _gerarCertidoesConjugeHTML() {
+  return TIPOS_CERTIDAO_JS.map(([tipoId, nomeLegivel]) => `
+    <div class="doc-par">
+      <div class="dossie-slot" data-doc="conjuge_${tipoId}">
+        <div class="icon">+</div>
+        <div class="info"><div class="tab">${nomeLegivel}</div><div class="hint">enviar arquivo</div></div>
+      </div>
+      <input type="file" data-doc="conjuge_${tipoId}" style="display:none" accept="image/*,.pdf">
+    </div>`).join('');
+}
+
+// Chamada pelo <select> de participacao do conjuge (so_qualifica /
+// outorga_tambem / anui) -- controla se aparece o slot de upload do
+// documento do conjuge, e se aparecem as 7 certidoes dele (so' faz
+// sentido quando ele vira co-outorgante de verdade, nao quando so'
+// anui ou so' e' citado na qualificacao).
+function conjugeParticipacaoMudou(select) {
+  const bloco = select.closest('.conjuge-participacao-bloco');
+  const rowPdfUnico = bloco.querySelector('.chave-row-conjuge-pdf-unico');
+  const chavePdfUnico = bloco.querySelector('.chave-conjuge-pdf-unico');
+  const docCombinado = bloco.querySelector('.conjuge-doc-combinado');
+  const docPar = bloco.querySelector('.conjuge-doc-par');
+  const certLabel = bloco.querySelector('.conjuge-certidoes-label');
+  const certContainer = bloco.querySelector('.conjuge-certidoes-container');
+  const participacao = select.value;
+
+  const precisaDoc = participacao === 'outorga_tambem' || participacao === 'anui';
+
+  // PDF unico do conjuge so' faz sentido quando ele tambem outorga (ai' sim
+  // sao 8 documentos: identidade + 7 certidoes). No "anui" e' so' 1
+  // documento mesmo, nao ha' o que combinar -- entao o seletor nem aparece,
+  // e reseta pra "separado" caso tivesse ficado ligado de uma selecao anterior.
+  const mostrarSeletorPdfUnico = participacao === 'outorga_tambem';
+  rowPdfUnico.style.display = mostrarSeletorPdfUnico ? 'flex' : 'none';
+  if (!mostrarSeletorPdfUnico && chavePdfUnico.classList.contains('ativo')) {
+    chavePdfUnico.classList.remove('ativo');
+    const lados = rowPdfUnico.querySelectorAll('.chave-lado');
+    lados[0].classList.add('ativo');
+    lados[1].classList.remove('ativo');
+  }
+  const ehCombinado = mostrarSeletorPdfUnico && chavePdfUnico.classList.contains('ativo');
+
+  docCombinado.style.display = (precisaDoc && ehCombinado) ? 'flex' : 'none';
+  if (!(precisaDoc && ehCombinado)) {
+    const inputCombinado = docCombinado.querySelector('input[type="file"]');
+    if (inputCombinado) inputCombinado.value = '';
+  }
+
+  docPar.style.display = (precisaDoc && !ehCombinado) ? 'flex' : 'none';
+  if (!(precisaDoc && !ehCombinado)) {
+    const input = docPar.querySelector('input[type="file"]');
+    if (input) input.value = '';
+  }
+
+  const precisaCertidoes = participacao === 'outorga_tambem' && !ehCombinado;
+  certLabel.style.display = precisaCertidoes ? 'block' : 'none';
+  certContainer.style.display = precisaCertidoes ? 'flex' : 'none';
+  if (precisaCertidoes && !certContainer.dataset.montado) {
+    certContainer.innerHTML = _gerarCertidoesConjugeHTML();
+    certContainer.dataset.montado = '1';
+  }
+  if (!precisaCertidoes) {
+    // limpa qualquer arquivo ja selecionado nas certidoes do conjuge, pra
+    // nao mandar sujeira se o usuario mudar de participacao/modo depois de
+    // ja ter anexado alguma coisa
+    certContainer.querySelectorAll('input[type="file"]').forEach(inp => inp.value = '');
+  }
+}
+
+function resetarBloco(el) {
+  el.querySelectorAll('.chave.ativo').forEach(ch => ch.classList.remove('ativo'));
+  el.querySelectorAll('.chave-row').forEach(row => {
+    const lados = row.querySelectorAll('.chave-lado');
+    lados[0].classList.add('ativo');
+    lados[1].classList.remove('ativo');
+  });
+  el.querySelectorAll('.proc-slot').forEach(p => p.style.display = 'none');
+  el.querySelectorAll('.dossie-slot').forEach(slot => {
+    slot.classList.remove('preenchido');
+    const icon = slot.querySelector('.icon'); if (icon) icon.textContent = '+';
+    const hint = slot.querySelector('.hint'); if (hint) hint.textContent = 'enviar arquivo';
+    const acao = slot.querySelector('.acao'); if (acao) acao.remove();
+  });
+  // limpa o valor de qualquer input de arquivo (por seguranca -- navegadores
+  // ja nao preservam File ao clonar um <input type="file">, mas isso garante
+  // que nao sobra nenhum estado visual herdado do card original)
+  el.querySelectorAll('input[type="file"]').forEach(input => { input.value = ''; });
+  // remove pares de "comarca diferente" extras que o card original (usado
+  // como molde pra clonagem) possa ja ter -- o card novo comeca sempre
+  // limpo, sem certidao nenhuma marcada
+  el.querySelectorAll('.lista-comarca-diferente .doc-par').forEach(par => par.remove());
+  // reseta a participacao do conjuge pro padrao (o card novo comeca sempre
+  // como "so' qualifica", mesmo se o card-molde clonado estivesse com
+  // "outorga_tambem"/"anui" selecionado e ja tivesse as 7 certidoes do
+  // conjuge montadas em tela)
+  const selectConjuge = el.querySelector('.conjuge-participacao-select');
+  if (selectConjuge) {
+    selectConjuge.value = 'so_qualifica';
+    const certContainer = el.querySelector('.conjuge-certidoes-container');
+    if (certContainer) { certContainer.innerHTML = ''; delete certContainer.dataset.montado; }
+    conjugeParticipacaoMudou(selectConjuge);
+  }
+  // sincroniza a visibilidade doc-pf/doc-pj/combinado/certidoes com as
+  // chaves recem-resetadas acima (senao o card novo podia herdar um
+  // display style inline do card-molde que nao bate mais com o estado
+  // "tudo desligado" das chaves)
+  if (el.classList.contains('party-card')) _atualizarVisibilidadePF(el);
+}
+
+function adicionarBloco(listaId, cardClass, rotulo) {
+  const lista = document.getElementById(listaId);
+  const cards = lista.querySelectorAll('.' + cardClass);
+  const novo = cards[0].cloneNode(true);
+  resetarBloco(novo);
+  const n = cards.length + 1;
+  const h3 = novo.querySelector('h3');
+  const alt = h3.querySelector('.party-alt');
+  if (alt) {
+    h3.childNodes[0].textContent = rotulo + ' ' + n + ' ';
+  } else {
+    h3.textContent = rotulo + ' ' + n;
+  }
+  const remover = document.createElement('button');
+  remover.className = 'btn-remover';
+  remover.textContent = '× remover';
+  remover.onclick = function () { novo.remove(); };
+  (h3.parentElement.classList.contains('party-head') ? h3.parentElement : h3).appendChild(remover);
+  lista.appendChild(novo);
+}
+
+// Cria dinamicamente um par slot+input pra mais uma "certidao de feitos
+// ajuizados em comarca diferente" -- esse e' o unico tipo de certidao que
+// pode se repetir (zero, uma, ou varias), diferente dos outros 7 tipos
+// fixos que tem exatamente um slot por pessoa. Cada par novo e' totalmente
+// independente dos outros (mesmo padrao data-doc repetido, mas escopado
+// por proximidade no DOM -- ver clickListenerDelegado abaixo), entao nao
+// ha risco do bug de id duplicado acontecer aqui.
+function adicionarComarcaDiferente(botao) {
+  const card = botao.closest('.party-card');
+  const container = card.querySelector('.lista-comarca-diferente');
+  const contador = container.querySelectorAll('.doc-par').length + 1;
+
+  const par = document.createElement('div');
+  par.className = 'doc-par';
+  par.innerHTML = `
+    <div class="dossie-slot" data-doc="certidao_feitos_comarca_diferente">
+      <div class="icon">+</div>
+      <div class="info"><div class="tab">Feitos Ajuizados — comarca diferente (${contador})</div><div class="hint">enviar arquivo</div></div>
+    </div>
+    <input type="file" data-doc="certidao_feitos_comarca_diferente" style="display:none" accept="image/*,.pdf">
+  `;
+  const remover = document.createElement('div');
+  remover.className = 'acao';
+  remover.textContent = 'remover';
+  remover.style.cursor = 'pointer';
+  remover.onclick = (e) => { e.stopPropagation(); par.remove(); };
+  par.querySelector('.info').appendChild(remover);
+
+  container.appendChild(par);
+}
+
+// ---------------------------------------------------------------------------
+// FLUXO DE NOVA MINUTA CONECTADO NA API REAL
+// ---------------------------------------------------------------------------
+const documentos = {};       // chave -> File selecionado (usado so' pelos slots com id fixo: imovel, analista de matricula)
+const estadoCaso = {};       // guarda o que a API devolveu, entre os passos
+
+// Liga cada slot de upload ao seu <input type="file"> escondido: ao
+// escolher um arquivo, marca o slot como preenchido (icone, nome do
+// arquivo) e guarda o File em `documentos` pra mandar depois. Usado
+// apenas pelos slots que AINDA tem id fixo (imovel-matricula, imovel-onus,
+// imovel-iptu, analista-matricula) -- esses sao sempre unicos na pagina
+// (nao sao clonados via "+ Adicionar outro"), entao id fixo nao tem risco
+// de duplicacao. Os slots de outorgante/outorgado usam o mecanismo NOVO
+// (data-doc + delegacao) logo abaixo, exatamente pra evitar esse risco.
+function configurarUploads() {
+  document.querySelectorAll('input[type="file"][id^="input-"]').forEach(input => {
+    const chave = input.id.replace('input-', '');
+    const slot = document.getElementById('slot-' + chave);
+    if (!slot) return;
+    input.addEventListener('change', () => {
+      if (input.files.length === 0) return;
+      documentos[chave] = input.files[0];
+      slot.classList.add('preenchido');
+      const icon = slot.querySelector('.icon');
+      const hint = slot.querySelector('.hint');
+      if (icon) icon.textContent = '✓';
+      if (hint) hint.textContent = input.files[0].name;
+      if (!slot.querySelector('.acao')) {
+        const acao = document.createElement('div');
+        acao.className = 'acao';
+        acao.textContent = 'trocar';
+        slot.appendChild(acao);
+      }
+    });
+  });
+}
+
+// Mecanismo NOVO pra slots de outorgante/outorgado (incluindo certidoes):
+// em vez de id fixo (que duplicava ao clonar um card pra "+ Adicionar
+// outro outorgante", causando o bug de clique nao abrir o arquivo certo),
+// cada slot e' escopado pelo seu proprio pai direto (.doc-par) -- clicar
+// no slot sempre abre o input QUE ESTA DENTRO DO MESMO .doc-par, nunca o
+// de outro card ou de outro par repetido (como as varias "comarca
+// diferente" que podem existir dentro do mesmo card). Delegado no
+// document uma unica vez, entao funciona automaticamente pra cards
+// clonados no futuro, sem precisar re-registrar nada.
+document.addEventListener('click', (e) => {
+  const slot = e.target.closest('.dossie-slot[data-doc]');
+  if (!slot) return;
+  if (e.target.closest('.acao')) return; // clique em "trocar/remover" nao deve reabrir o seletor de arquivo por baixo
+  const input = slot.parentElement.querySelector('input[type="file"][data-doc]');
+  if (input) input.click();
+});
+
+document.addEventListener('change', (e) => {
+  const input = e.target;
+  if (!(input instanceof HTMLInputElement) || input.type !== 'file' || !input.dataset.doc) return;
+  if (input.files.length === 0) return;
+  const slot = input.parentElement.querySelector('.dossie-slot');
+  if (!slot) return;
+  slot.classList.add('preenchido');
+  const icon = slot.querySelector('.icon'); if (icon) icon.textContent = '✓';
+  const hint = slot.querySelector('.hint'); if (hint) hint.textContent = input.files[0].name;
+  if (!slot.querySelector('.acao')) {
+    const acao = document.createElement('div');
+    acao.className = 'acao';
+    acao.textContent = 'trocar';
+    slot.appendChild(acao);
+  }
+});
+
+function obterEstadoParte(card) {
+  const chaves = card.querySelectorAll('.chave-row .chave');
+  const chavePdfUnico = card.querySelector('.chave-pdf-unico');
+  const selectConjuge = card.querySelector('.conjuge-participacao-select');
+  const chaveConjugePdfUnico = card.querySelector('.chave-conjuge-pdf-unico');
+  return {
+    tipo: chaves[0].classList.contains('ativo') ? 'PJ' : 'PF',
+    procuracao: chaves[1] ? chaves[1].classList.contains('ativo') : false,
+    pdfUnico: chavePdfUnico ? chavePdfUnico.classList.contains('ativo') : false,
+    conjugeParticipacao: selectConjuge ? selectConjuge.value : 'so_qualifica',
+    conjugePdfUnico: chaveConjugePdfUnico ? chaveConjugePdfUnico.classList.contains('ativo') : false,
+  };
+}
+
+// Le o arquivo selecionado num slot de um card especifico, dado o
+// data-doc -- retorna o File ou null/undefined se nada foi selecionado
+// ainda. Como cada par slot+input agora fica dentro do mesmo .doc-par,
+// da' pra buscar o input certo mesmo que existam varios elementos com o
+// mesmo data-doc na pagina (outro outorgante, outro par de "comarca
+// diferente").
+function arquivoDoCard(card, dataDoc) {
+  const input = card.querySelector(`input[type="file"][data-doc="${dataDoc}"]`);
+  return input && input.files.length > 0 ? input.files[0] : null;
+}
+
+function arquivosDoCard(card, dataDoc) {
+  // versao "lista" -- usada so' pra certidao_feitos_comarca_diferente,
+  // que pode ter varios pares repetidos dentro do mesmo card
+  return [...card.querySelectorAll(`input[type="file"][data-doc="${dataDoc}"]`)]
+    .map(input => input.files[0])
+    .filter(Boolean);
+}
+
+// Monta os campos de FormData de UM card (outorgante ou outorgado) com o
+// prefixo indexado que o backend espera (ex: 'outorgante_0', 'outorgado_2').
+// Retorna a lista de nomes de documentos faltando (vazia se tudo certo).
+function anexarCardAoFormData(form, card, prefixo, rotuloHumano) {
+  const estado = obterEstadoParte(card);
+  const faltando = [];
+
+  // as 7 certidoes fixas -- cada uma e' opcional (nao enviada = dispensada
+  // automaticamente no backend), entao so' anexa se realmente tiver arquivo.
+  // Declarado no topo da funcao porque tambem e' usado no bloco de
+  // certidoes do CONJUGE participante, mais abaixo.
+  const TIPOS_CERTIDAO_FIXOS = [
+    'certidao_debitos_trabalhistas', 'certidao_feitos_1_distribuidor',
+    'certidao_feitos_2_distribuidor', 'certidao_feitos_trt',
+    'certidao_feitos_trf', 'certidao_tributos_federais', 'certidao_tributos_estaduais',
+  ];
+
+  form.append(`${prefixo}_tipo`, estado.tipo);
+  form.append(`${prefixo}_por_procuracao`, estado.procuracao ? 'true' : 'false');
+  if (estado.procuracao) {
+    const procuracaoDoc = arquivoDoCard(card, 'procuracao');
+    if (!procuracaoDoc) {
+      faltando.push(`procuração do ${rotuloHumano}`);
+    } else {
+      form.append(`${prefixo}_procuracao`, procuracaoDoc);
+    }
+  }
+
+  if (estado.tipo === 'PF') {
+    if (estado.pdfUnico) {
+      // Um arquivo so' cobre identidade + estado civil + comprovante +
+      // as 7 certidoes negativas -- o backend tenta extrair cada pedaco
+      // dali (mesma logica ja' usada pro "documento combinado" do
+      // imovel: só aceita o que realmente encontrar, o resto fica
+      // pendente normalmente, nunca finge que achou).
+      const combinadoDoc = arquivoDoCard(card, 'combinado');
+      if (!combinadoDoc) {
+        faltando.push(`documento combinado do ${rotuloHumano}`);
+      } else {
+        form.append(`${prefixo}_combinado`, combinadoDoc);
+      }
+    } else {
+      const doc = arquivoDoCard(card, 'doc');
+      if (!doc) {
+        faltando.push(`documento de identificação do ${rotuloHumano}`);
+      } else {
+        form.append(`${prefixo}_doc`, doc);
+      }
+      const estadoCivilDoc = arquivoDoCard(card, 'estado_civil');
+      if (estadoCivilDoc) form.append(`${prefixo}_estado_civil`, estadoCivilDoc);
+      const comprovanteDoc = arquivoDoCard(card, 'comprovante');
+      if (comprovanteDoc) form.append(`${prefixo}_comprovante`, comprovanteDoc);
+      const cnhDoc = arquivoDoCard(card, 'cnh');
+      if (cnhDoc) form.append(`${prefixo}_cnh`, cnhDoc);
+    }
+
+    // Participacao do conjuge -- so' manda os campos extras quando NAO for
+    // o padrao "so_qualifica" (nesse caso o backend ja assume esse valor
+    // por conta propria, nem precisa do campo vir no form). Isso vale
+    // tanto no modo separado quanto no PDF unico -- o conjuge sempre tem
+    // upload proprio, nunca entra dentro do combinado do titular.
+    if (estado.conjugeParticipacao !== 'so_qualifica') {
+      form.append(`${prefixo}_conjuge_participacao`, estado.conjugeParticipacao);
+
+      if (estado.conjugeParticipacao === 'outorga_tambem' && estado.conjugePdfUnico) {
+        // PDF unico do CONJUGE -- so' identidade + as 7 certidoes (nunca
+        // estado civil/comprovante, que ja vieram do titular e nao devem
+        // ser lidos de novo do lado do conjuge pra nao entrar em conflito
+        // com o que o titular ja' informou)
+        const conjugeCombinado = arquivoDoCard(card, 'conjuge_combinado');
+        if (!conjugeCombinado) {
+          faltando.push(`documento combinado do cônjuge do ${rotuloHumano}`);
+        } else {
+          form.append(`${prefixo}_conjuge_combinado`, conjugeCombinado);
+        }
+      } else {
+        const conjugeDoc = arquivoDoCard(card, 'conjuge_doc');
+        if (!conjugeDoc) {
+          faltando.push(`documento de identificação do cônjuge do ${rotuloHumano}`);
+        } else {
+          form.append(`${prefixo}_conjuge_doc`, conjugeDoc);
+        }
+        if (estado.conjugeParticipacao === 'outorga_tambem') {
+          TIPOS_CERTIDAO_FIXOS.forEach(tipoCert => {
+            const arquivoConjuge = arquivoDoCard(card, `conjuge_${tipoCert}`);
+            if (arquivoConjuge) form.append(`${prefixo}_conjuge_${tipoCert}`, arquivoConjuge);
+          });
+        }
+      }
+    }
+  } else {
+    const contrato = arquivoDoCard(card, 'contrato');
+    const representante = arquivoDoCard(card, 'representante');
+    if (!contrato || !representante) {
+      faltando.push(`contrato social / representante do ${rotuloHumano}`);
+    } else {
+      form.append(`${prefixo}_contrato`, contrato);
+      form.append(`${prefixo}_representante`, representante);
+      const simplificada = arquivoDoCard(card, 'simplificada');
+      if (simplificada) form.append(`${prefixo}_simplificada`, simplificada);
+    }
+  }
+
+  // as 7 certidoes fixas do titular -- so' fazem sentido no modo
+  // separado; no PDF unico elas ja' vao dentro do arquivo combinado
+  // acima (TIPOS_CERTIDAO_FIXOS ja' foi declarado no topo da funcao)
+  if (!(estado.tipo === 'PF' && estado.pdfUnico)) {
+    TIPOS_CERTIDAO_FIXOS.forEach(tipoCert => {
+      const arquivo = arquivoDoCard(card, tipoCert);
+      if (arquivo) form.append(`${prefixo}_${tipoCert}`, arquivo);
+    });
+  }
+
+  // "comarca diferente" -- lista repetivel, pode ter zero, um, ou varios
+  arquivosDoCard(card, 'certidao_feitos_comarca_diferente').forEach(arquivo => {
+    form.append(`${prefixo}_certidao_feitos_comarca_diferente`, arquivo);
+  });
+
+  return faltando;
+}
+
+async function processarDocumentos() {
+  const erroEl = document.getElementById('docs-erro');
+  erroEl.style.display = 'none';
+
+  const cardsOutorgantes = [...document.querySelectorAll('#lista-outorgantes .party-card')];
+  const cardsOutorgados = [...document.querySelectorAll('#lista-outorgados .party-card')];
+  const imovelCombinadoAtivo = document.getElementById('chave-imovel-combinado').classList.contains('ativo');
+  const matricula = imovelCombinadoAtivo ? documentos['imovel-combinado'] : documentos['imovel-matricula'];
+
+  let faltando = [];
+  const form = new FormData();
+
+  cardsOutorgantes.forEach((card, i) => {
+    const rotulo = cardsOutorgantes.length > 1 ? `outorgante ${i + 1}` : 'outorgante';
+    faltando = faltando.concat(anexarCardAoFormData(form, card, `outorgante_${i}`, rotulo));
+  });
+  cardsOutorgados.forEach((card, i) => {
+    const rotulo = cardsOutorgados.length > 1 ? `outorgado ${i + 1}` : 'outorgado';
+    faltando = faltando.concat(anexarCardAoFormData(form, card, `outorgado_${i}`, rotulo));
+  });
+  if (!matricula) faltando.push(imovelCombinadoAtivo ? 'documento combinado do imóvel' : 'matrícula do imóvel');
+
+  if (faltando.length > 0) {
+    erroEl.textContent = 'Faltam documentos obrigatórios: ' + faltando.join(', ') + '.';
+    erroEl.style.display = 'block';
+    return;
+  }
+
+  if (imovelCombinadoAtivo) {
+    // Um unico arquivo cobre matricula + onus + certidao de IPTU -- o
+    // backend roda a mesma extracao do imovel nele e tambem tenta achar
+    // os dados da certidao de tributos municipais no mesmo documento
+    // (bastante comum: varios Registros de Imoveis e Prefeituras emitem
+    // isso tudo junto).
+    form.append('imovel_combinado', matricula);
+  } else {
+    form.append('imovel_matricula', matricula);
+    if (documentos['imovel-onus']) {
+      form.append('imovel_onus', documentos['imovel-onus']);
+    }
+    if (documentos['imovel-certidao-municipal']) {
+      form.append('imovel_certidao_municipal', documentos['imovel-certidao-municipal']);
+    }
+  }
+
+  // Conta quantos arquivos foram realmente anexados (cada um pode levar ate
+  // 60-120s no backend, dependendo do tipo) pra calcular um timeout de
+  // cliente realista -- com N partes e ate 8 certidoes cada, o numero de
+  // documentos processados nessa chamada pode variar bastante, entao um
+  // numero fixo de "3 etapas" (valido so' pro caso mais simples de 1+1)
+  // deixaria de fazer sentido e cortaria a espera cedo demais em casos
+  // com mais partes/certidoes.
+  let totalArquivos = 0;
+  for (const [, valor] of form.entries()) {
+    if (valor instanceof File) totalArquivos++;
+  }
+  const timeoutClienteMs = Math.max(260000, totalArquivos * 70000 + 30000);
+
+  const btn = document.getElementById('btn-continuar-docs');
+  const textoOriginal = btn.textContent;
+  btn.disabled = true;
+
+  // Progresso por tempo decorrido (nao mais uma lista fixa de "3 etapas",
+  // ja que a quantidade real de documentos varia por caso) -- ainda assim
+  // da' uma nocao de avanco em vez do texto ficar parado.
+  const inicioProcessamento = Date.now();
+  btn.textContent = `Lendo documentos (0/${totalArquivos})...`;
+  const rotacao = setInterval(() => {
+    const segundosPassados = Math.round((Date.now() - inicioProcessamento) / 1000);
+    // estimativa grosseira de quantos documentos ja deveriam ter sido lidos,
+    // so' pra dar sensacao de progresso -- nao e' sincronizado de verdade
+    // com o backend (que processa tudo numa unica chamada)
+    const estimativaLidos = Math.min(totalArquivos, Math.floor(segundosPassados / 25));
+    btn.textContent = `Lendo documentos (${estimativaLidos}/${totalArquivos}, ${segundosPassados}s)...`;
+  }, 5000);
+
+  const controlador = new AbortController();
+  const idTimeoutCliente = setTimeout(() => controlador.abort(), timeoutClienteMs);
+
+  try {
+    const resp = await fetchAutenticado('/api/processar-documentos', {
+      method: 'POST', body: form, signal: controlador.signal,
+    });
+    const dados = await resp.json();
+    if (resp.ok) {
+      estadoCaso.outorgantes = dados.outorgantes;
+      estadoCaso.outorgados = dados.outorgados;
+      // mantidos por compatibilidade com telas/funcoes que ainda leem o
+      // primeiro outorgante/outorgado como "o" outorgante/outorgado --
+      // casos com mais de uma parte de cada lado usam as listas acima
+      estadoCaso.outorgante = dados.outorgantes[0];
+      estadoCaso.outorgado = dados.outorgados[0];
+      estadoCaso.imovel = dados.dados_imovel;
+      estadoCaso.condicoes_certidoes = dados.condicoes_certidoes || {};
+      estadoCaso.pontos_atencao = dados.pontos_atencao || [];
+      estadoCaso.onus_dispensado = !documentos['imovel-onus'];
+      const onus = dados.dados_imovel.onus_vigente || dados.dados_imovel.onus;
+      const onusFormatado = formatarOnus(onus);
+      estadoCaso.onus_existe = !!onusFormatado;
+      estadoCaso.onus_texto = onusFormatado || '';
+      preencherConfirmacao();
+      irPasso('conf');
+    } else {
+      erroEl.textContent = dados.detail || 'Erro ao processar documentos.';
+      erroEl.style.display = 'block';
+    }
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      erroEl.textContent = 'O servidor demorou demais pra responder (mais de 4 minutos). Tente novamente -- se persistir, confira sua conexão ou tente com documentos menores.';
+    } else {
+      erroEl.textContent = 'Não foi possível conectar ao servidor.';
+    }
+    erroEl.style.display = 'block';
+  } finally {
+    clearInterval(rotacao);
+    clearTimeout(idTimeoutCliente);
+    btn.textContent = textoOriginal;
+    btn.disabled = false;
+  }
+}
+
+function _campoConfirmacao(id, label, valor, opcoes = {}) {
+  const classe = ['field', opcoes.destaque ? 'destaque' : '', opcoes.mono ? '' : ''].filter(Boolean).join(' ');
+  const inputClasse = opcoes.mono ? ' class="mono"' : '';
+  const span = opcoes.largo ? ' style="grid-column: span 2;"' : '';
+  return `<div class="field${opcoes.destaque ? ' destaque' : ''}"${span}><label>${label}</label><input id="${id}"${inputClasse} value="${(valor || '').toString().replace(/"/g, '&quot;')}"></div>`;
+}
+
+function _renderizarCardsPessoas(lista, prefixo, tituloBase, altBase, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  lista.forEach((pessoa, i) => {
+    const sufixo = lista.length > 1 ? ` ${i + 1}` : '';
+    const secao = document.createElement('div');
+    secao.className = 'form-section';
+    const cp = pessoa.conjuge_participante;
+    const temConjugeParticipante = cp && cp.participacao !== 'so_qualifica' && cp.dados;
+    secao.innerHTML = `
+      <h3>${tituloBase}${sufixo} <span class="party-alt">(${altBase})</span></h3>
+      <div class="form-grid">
+        ${_campoConfirmacao(`conf-${prefixo}-${i}-nome`, 'Nome', pessoa.nome || pessoa.razao_social, { largo: true })}
+        ${_campoConfirmacao(`conf-${prefixo}-${i}-profissao`, 'Profissão', pessoa.profissao)}
+        ${_campoConfirmacao(`conf-${prefixo}-${i}-estadocivil`, 'Estado civil', pessoa.estado_civil)}
+        ${_campoConfirmacao(`conf-${prefixo}-${i}-rg`, 'RG / CNPJ', pessoa.rg || pessoa.cnpj, { mono: true })}
+        ${_campoConfirmacao(`conf-${prefixo}-${i}-orgao`, 'Órgão expedidor', pessoa.orgao_expedidor, { mono: true })}
+        ${_campoConfirmacao(`conf-${prefixo}-${i}-cpf`, 'CPF', pessoa.cpf || pessoa.cnpj, { mono: true, destaque: true, largo: true })}
+        ${_campoConfirmacao(`conf-${prefixo}-${i}-conjuge`, 'Nome do cônjuge', pessoa.nome_conjuge)}
+        ${_campoConfirmacao(`conf-${prefixo}-${i}-regimebens`, 'Regime de bens', pessoa.regime_bens)}
+      </div>
+      ${temConjugeParticipante ? `
+        <div class="sub-label" style="margin-top:12px;">
+          Cônjuge (${cp.participacao === 'outorga_tambem' ? 'também outorga' : 'anuente'}) — confira, a extração pode não pegar tudo
+        </div>
+        <div class="form-grid">
+          ${_campoConfirmacao(`conf-${prefixo}-${i}-conjugeparticipante-nome`, 'Nome', cp.dados.nome, { largo: true })}
+          ${_campoConfirmacao(`conf-${prefixo}-${i}-conjugeparticipante-profissao`, 'Profissão', cp.dados.profissao)}
+          ${_campoConfirmacao(`conf-${prefixo}-${i}-conjugeparticipante-estadocivil`, 'Estado civil', cp.dados.estado_civil)}
+          ${_campoConfirmacao(`conf-${prefixo}-${i}-conjugeparticipante-rg`, 'RG', cp.dados.rg, { mono: true })}
+          ${_campoConfirmacao(`conf-${prefixo}-${i}-conjugeparticipante-orgao`, 'Órgão expedidor', cp.dados.orgao_expedidor, { mono: true })}
+          ${_campoConfirmacao(`conf-${prefixo}-${i}-conjugeparticipante-cpf`, 'CPF', cp.dados.cpf, { mono: true, destaque: true, largo: true })}
+        </div>
+      ` : ''}
+      ${(pessoa._tipo !== 'PJ' && prefixo === 'outorgante') ? `
+        <div class="sub-label" style="margin-top:12px;">Certidões</div>
+        <div class="cert-status-lista" id="cert-status-${prefixo}-${i}">${_htmlStatusCertidoes(pessoa, prefixo, i)}</div>
+      ` : ''}`;
+    container.appendChild(secao);
+  });
+}
+
+// Chamado pelo botao "dispensar"/"desfazer" de cada linha de certidao
+// pendente -- so' atualiza a LISTA DE CERTIDOES daquele card especifico
+// (nunca a tela inteira), pra nao perder edicoes que o usuario ja tenha
+// feito nos outros campos (nome, CPF etc.) que so' sincronizam de volta
+// pro estadoCaso na hora de gerar a minuta, nao a cada tecla digitada.
+function toggleDispensaCertidao(prefixo, indice, tipoId) {
+  const lista = prefixo === 'outorgante' ? (estadoCaso.outorgantes || [estadoCaso.outorgante]) : (estadoCaso.outorgados || [estadoCaso.outorgado]);
+  const pessoa = lista[indice];
+  if (!pessoa) return;
+  if (!pessoa.certidoes_dispensadas_manualmente) pessoa.certidoes_dispensadas_manualmente = [];
+  const posicao = pessoa.certidoes_dispensadas_manualmente.indexOf(tipoId);
+  if (posicao >= 0) {
+    pessoa.certidoes_dispensadas_manualmente.splice(posicao, 1);
+  } else {
+    pessoa.certidoes_dispensadas_manualmente.push(tipoId);
+  }
+  const container = document.getElementById(`cert-status-${prefixo}-${indice}`);
+  if (container) container.innerHTML = _htmlStatusCertidoes(pessoa, prefixo, indice);
+  _atualizarBloqueioGeracaoPorCertidoes(estadoCaso.outorgantes || [estadoCaso.outorgante], estadoCaso.outorgados || [estadoCaso.outorgado]);
+}
+
+// Le de volta os campos editados na tela de Confirmacao pra dentro da
+// lista de pessoas correspondente -- sem isso, qualquer correcao manual
+// feita aqui (nome com acento errado, CPF que a IA leu errado, etc.) seria
+// perdida na hora de gerar a minuta, porque o back so' recebe o que for
+// mandado no payload, nao o que esta na tela.
+function _lerCardsPessoasEditados(lista, prefixo) {
+  const get = (id) => { const el = document.getElementById(id); return el ? el.value : undefined; };
+  return lista.map((pessoa, i) => {
+    const cp = pessoa.conjuge_participante;
+    const conjugeParticipanteEditado = (cp && cp.dados) ? {
+      ...cp,
+      dados: {
+        ...cp.dados,
+        nome: get(`conf-${prefixo}-${i}-conjugeparticipante-nome`) ?? cp.dados.nome,
+        profissao: get(`conf-${prefixo}-${i}-conjugeparticipante-profissao`) ?? cp.dados.profissao,
+        estado_civil: get(`conf-${prefixo}-${i}-conjugeparticipante-estadocivil`) ?? cp.dados.estado_civil,
+        rg: get(`conf-${prefixo}-${i}-conjugeparticipante-rg`) ?? cp.dados.rg,
+        orgao_expedidor: get(`conf-${prefixo}-${i}-conjugeparticipante-orgao`) ?? cp.dados.orgao_expedidor,
+        cpf: get(`conf-${prefixo}-${i}-conjugeparticipante-cpf`) ?? cp.dados.cpf,
+      },
+    } : cp;
+    return {
+      ...pessoa,
+      nome: pessoa.razao_social ? pessoa.nome : (get(`conf-${prefixo}-${i}-nome`) ?? pessoa.nome),
+      razao_social: pessoa.razao_social ? (get(`conf-${prefixo}-${i}-nome`) ?? pessoa.razao_social) : pessoa.razao_social,
+      profissao: get(`conf-${prefixo}-${i}-profissao`) ?? pessoa.profissao,
+      estado_civil: get(`conf-${prefixo}-${i}-estadocivil`) ?? pessoa.estado_civil,
+      rg: pessoa.cnpj ? pessoa.rg : (get(`conf-${prefixo}-${i}-rg`) ?? pessoa.rg),
+      orgao_expedidor: get(`conf-${prefixo}-${i}-orgao`) ?? pessoa.orgao_expedidor,
+      cpf: pessoa.cnpj ? pessoa.cpf : (get(`conf-${prefixo}-${i}-cpf`) ?? pessoa.cpf),
+      cnpj: pessoa.cnpj ? (get(`conf-${prefixo}-${i}-cpf`) ?? pessoa.cnpj) : pessoa.cnpj,
+      nome_conjuge: get(`conf-${prefixo}-${i}-conjuge`) ?? pessoa.nome_conjuge,
+      regime_bens: get(`conf-${prefixo}-${i}-regimebens`) ?? pessoa.regime_bens,
+      conjuge_participante: conjugeParticipanteEditado,
+    };
+  });
+}
+
+// Mesma logica de _statusCertidoesPessoa, mas pra certidao do IMOVEL
+// (hoje so' existe uma: tributos_municipais -- item 8 da escritura).
+function _statusCertidaoImovel(imovel) {
+  const certidoesExtras = (imovel && imovel.certidoes_extras) || {};
+  const enviada = !!certidoesExtras.tributos_municipais;
+  return { nome: 'Certidão de Tributos Municipais', enviada, pendenteObrigatoria: !enviada };
+}
+
+// Mostra um AVISO informativo quando alguma certidao ainda estiver
+// pendente (nem enviada, nem dispensada) -- NUNCA MAIS desabilita o
+// botao "Gerar minuta". A decisao de seguir ou nao com pendencia e'
+// sempre do tabeliao, nao do sistema; o aviso so' existe pra ele nao
+// esquecer de revisar antes de assinar. So' olha o lado OUTORGANTE --
+// o modelo de escritura nunca verificou certidao do outorgado.
+function _atualizarBloqueioGeracaoPorCertidoes(outorgantes, outorgados) {
+  const btn = document.getElementById('btn-gerar-minuta');
+  const erroEl = document.getElementById('gerar-erro');
+  if (!btn || !erroEl) return;
+
+  const pendencias = [];
+  outorgantes.forEach((pessoa) => {
+    if (pessoa._tipo === 'PJ') return;
+    _statusCertidoesPessoa(pessoa).forEach(s => {
+      if (s.pendenteObrigatoria) pendencias.push(`${pessoa.nome || 'parte'}: ${s.nome}`);
+    });
+  });
+
+  const statusImovel = _statusCertidaoImovel(estadoCaso.imovel);
+  const containerImovel = document.getElementById('conf-imovel-cert-status');
+  if (containerImovel) {
+    const badge = statusImovel.enviada ? '✅ enviada' : '⚠️ pendente';
+    const classe = statusImovel.enviada ? 'cert-ok' : 'cert-pendente';
+    containerImovel.innerHTML = `<div class="cert-status-linha ${classe}"><span>${statusImovel.nome}</span><span>${badge}</span></div>`;
+  }
+  if (statusImovel.pendenteObrigatoria) pendencias.push(`Imóvel: ${statusImovel.nome}`);
+
+  btn.disabled = false;
+  if (pendencias.length > 0) {
+    erroEl.style.display = 'block';
+    erroEl.style.color = '#B69A62';
+    erroEl.textContent = `Atenção — ainda faltam ou não foram dispensadas: ${pendencias.join('; ')}. Você pode gerar a minuta mesmo assim, mas confira antes de assinar.`;
+  } else {
+    erroEl.style.display = 'none';
+    erroEl.textContent = '';
+  }
+}
+
+let _contadorParcelas = 0;
+
+function adicionarParcela() {
+  const lista = document.getElementById('parcelas-lista');
+  _contadorParcelas++;
+  const id = _contadorParcelas;
+  const div = document.createElement('div');
+  div.className = 'parcela-item';
+  div.dataset.parcelaId = id;
+  div.style.cssText = 'background:var(--bg-secundario, rgba(16,42,67,0.03)); border-radius:8px; padding:12px; position:relative;';
+  div.innerHTML = `
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+      <span style="font-size:13px; font-weight:500;">Parcela</span>
+      <button type="button" onclick="this.closest('.parcela-item').remove()" style="border:none; background:transparent; color:var(--texto-sec); cursor:pointer; font-size:16px;" aria-label="Remover parcela">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Valor (R$)</label><input class="mono parcela-valor" placeholder="ex: 50.000,00"></div>
+      <div class="field"><label>Data do pagamento</label><input type="date" class="parcela-data"></div>
+      <div class="field" style="grid-column: span 2;"><label>Título do pagamento</label><input class="parcela-titulo" placeholder="ex: sinal de negócio, ou deixe em branco pra 'saldo remanescente'"></div>
+      <div class="field"><label>Banco (origem — comprador)</label><input class="parcela-banco-origem"></div>
+      <div class="field"><label>Agência (origem)</label><input class="mono parcela-agencia-origem"></div>
+      <div class="field" style="grid-column: span 2;"><label>Conta corrente (origem)</label><input class="mono parcela-conta-origem"></div>
+      <div class="field"><label>Banco (destino — vendedor)</label><input class="parcela-banco-destino"></div>
+      <div class="field"><label>Agência (destino)</label><input class="mono parcela-agencia-destino"></div>
+      <div class="field" style="grid-column: span 2;"><label>Conta corrente (destino)</label><input class="mono parcela-conta-destino"></div>
+    </div>`;
+  lista.appendChild(div);
+}
+
+// Converte 1,2,3... pra numeral romano minusculo (i, ii, iii, iv...) --
+// convencao usada nas alineas da forma de pagamento parcelada, igual o
+// modelo real que o usuario mandou (i) ... ii) ... iii) ...).
+function _numeralRomano(n) {
+  const tabela = [[1000,'m'],[900,'cm'],[500,'d'],[400,'cd'],[100,'c'],[90,'xc'],[50,'l'],[40,'xl'],[10,'x'],[9,'ix'],[5,'v'],[4,'iv'],[1,'i']];
+  let resto = n, resultado = '';
+  for (const [valor, simbolo] of tabela) {
+    while (resto >= valor) { resultado += simbolo; resto -= valor; }
+  }
+  return resultado;
+}
+
+// Monta a lista de nomes "vendedor(es)"/"comprador(es)" pra usar em
+// clausulas de quitacao -- inclui tanto os outorgantes/outorgados
+// PRINCIPAIS quanto qualquer conjuge com participacao "outorga_tambem"
+// (que e' um co-vendedor/co-comprador de verdade, so' que fica guardado
+// DENTRO de pessoa.conjuge_participante em vez de ser uma entrada
+// separada na lista -- ver enriquecer_pessoa_com_concordancia em
+// concordancia.py). Sem isso, a quitacao citava so' o titular e
+// "esquecia" o conjuge que tambem vendeu/comprou.
+function _nomesComConjugeOutorgante(lista) {
+  const nomes = [];
+  (lista || []).forEach(p => {
+    const nome = p.nome || p.razao_social;
+    if (nome) nomes.push(nome);
+    const cp = p.conjuge_participante;
+    if (cp && cp.participacao === 'outorga_tambem' && cp.dados && cp.dados.nome) {
+      nomes.push(cp.dados.nome);
+    }
+  });
+  return nomes.join(' e ');
+}
+
+// "dá" pra 1 pessoa so', "dão" quando o texto junta 2+ nomes com " e "
+// (ver _nomesComConjugeOutorgante acima) -- concordancia verbal simples
+// de numero, pra nao ficar "Fulano e Fulana DÁ quitação".
+function _verboQuitacao(nomesJuntos) {
+  return (nomesJuntos || '').includes(' e ') ? 'dão' : 'dá';
+}
+
+// Formata um valor digitado (com ou sem pontuacao) pro padrao R$
+// brasileiro "1.234,56" -- PARSE NORMAL (nao estilo calculadora): se tem
+// virgula, o que vier depois dela sao os centavos; se nao tem virgula, o
+// numero inteiro digitado (ex: "5000") vale como reais inteiros mesmo
+// ("5.000,00"), nunca como centavos ("50,00"). Usado no valor de cada
+// PARCELA, que e' um campo de texto livre (sem o oninput calculadora-style
+// que o campo principal 'conf-valor' tem via formatarCampoValor).
+function _formatarValorMonetario(valorBruto) {
+  const texto = String(valorBruto || '').trim();
+  if (!texto) return '';
+  let parteInteira, parteCentavos;
+  if (texto.includes(',')) {
+    const partes = texto.split(',');
+    parteInteira = partes[0].replace(/\D/g, '');
+    parteCentavos = (partes[1] || '').replace(/\D/g, '').padEnd(2, '0').slice(0, 2);
+  } else {
+    parteInteira = texto.replace(/\D/g, '');
+    parteCentavos = '00';
+  }
+  if (!parteInteira) return '';
+  parteInteira = parteInteira.replace(/^0+(?=\d)/, '') || '0';
+  const inteiroFormatado = parteInteira.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return `${inteiroFormatado},${parteCentavos}`;
+}
+
+// Busca o valor por extenso no mesmo endpoint ja' usado pro valor total
+// da transacao -- reusa a mesma logica de numero-por-extenso do backend
+// em vez de duplicar essa conversao (que tem bastante regra de
+// portugues) aqui no frontend.
+async function _valorPorExtenso(valorFormatado) {
+  if (!valorFormatado) return '';
+  try {
+    const form = new FormData();
+    form.append('valor', valorFormatado);
+    const resp = await fetchAutenticado('/api/valor-por-extenso', { method: 'POST', body: form });
+    const dados = await resp.json();
+    return dados.extenso || '';
+  } catch (e) {
+    return '';
+  }
+}
+
+// Monta o texto completo do item 9 pra pagamento parcelado, juntando
+// cada parcela na ordem em que aparece na tela -- campos vazios viram
+// "______" (branco de preenchimento manual, igual o resto da minuta),
+// nunca inventa dado. Os titulares de origem/destino vem automaticamente
+// do cadastro (nomes dos outorgados/outorgantes), sem precisar digitar.
+// E' ASYNC porque o valor por extenso de cada parcela vem do backend.
+async function _montarFormaPagamentoParcelado(outorgantes, outorgados) {
+  const nomeCompradores = _nomesComConjugeOutorgante(outorgados);
+  const nomeVendedores = _nomesComConjugeOutorgante(outorgantes);
+
+  const parcelasEl = [...document.querySelectorAll('#parcelas-lista .parcela-item')];
+  if (parcelasEl.length === 0) {
+    return 'meio de pagamento a ser especificado neste ato';
+  }
+
+  const get = (el, cls) => (el.querySelector('.' + cls) || {}).value || '';
+  const branco = (v) => v.trim() || '______';
+
+  const partes = await Promise.all(parcelasEl.map(async (el, i) => {
+    const numeral = _numeralRomano(i + 1);
+    const valorFormatado = _formatarValorMonetario(get(el, 'parcela-valor'));
+    const extenso = valorFormatado ? await _valorPorExtenso(valorFormatado) : '';
+    const valorTexto = valorFormatado
+      ? `R$ ${valorFormatado}${extenso ? ` (${extenso})` : ''}`
+      : 'R$ ______';
+    const data = get(el, 'parcela-data');
+    const dataFmt = data ? new Date(data + 'T00:00:00').toLocaleDateString('pt-BR') : '__/__/____';
+    const titulo = get(el, 'parcela-titulo').trim() || 'pagamento';
+    const bancoOrigem = branco(get(el, 'parcela-banco-origem'));
+    const agenciaOrigem = branco(get(el, 'parcela-agencia-origem'));
+    const contaOrigem = branco(get(el, 'parcela-conta-origem'));
+    const bancoDestino = branco(get(el, 'parcela-banco-destino'));
+    const agenciaDestino = branco(get(el, 'parcela-agencia-destino'));
+    const contaDestino = branco(get(el, 'parcela-conta-destino'));
+    const titularOrigem = nomeCompradores || '[FALTA: nome do comprador]';
+    const titularDestino = nomeVendedores || '[FALTA: nome do vendedor]';
+
+    return (
+      `${numeral}) ${valorTexto} pagos a título de ${titulo} em data de ${dataFmt}, por meio de transferência ` +
+      `bancária da conta corrente (origem) ${contaOrigem}, agência ${agenciaOrigem}, do banco ${bancoOrigem}, ` +
+      `de titularidade de ${titularOrigem}, para a conta corrente (destino) ${contaDestino}, agência ${agenciaDestino}, ` +
+      `do banco ${bancoDestino}, de titularidade de ${titularDestino}, pelo qual ${nomeVendedores ? nomeVendedores : 'O OUTORGANTE VENDEDOR'} ${_verboQuitacao(nomeVendedores)} plena, geral e irrevogável quitação`
+    );
+  }));
+
+  return 'em moeda corrente nacional deste país, da seguinte forma: ' + partes.join('; ');
+}
+
+function preencherConfirmacao() {
+  const outorgantes = estadoCaso.outorgantes || [estadoCaso.outorgante];
+  const outorgados = estadoCaso.outorgados || [estadoCaso.outorgado];
+  const di = estadoCaso.imovel;
+
+  _renderizarCardsPessoas(outorgantes, 'outorgante', 'Outorgante', 'Vendedor', 'conf-outorgantes-container');
+  _renderizarCardsPessoas(outorgados, 'outorgado', 'Outorgado', 'Comprador', 'conf-outorgados-container');
+  _atualizarBloqueioGeracaoPorCertidoes(outorgantes, outorgados);
+
+  const set = (id, valor) => { const el = document.getElementById(id); if (el) el.value = valor || ''; };
+
+  set('conf-imovel-endereco', di.endereco);
+  set('conf-imovel-matricula', di.matricula);
+  set('conf-imovel-area', di.area);
+  set('conf-imovel-comarca', di.comarca);
+  set('conf-imovel-circunscricao', di.circunscricao);
+
+  const alertBox = document.getElementById('conf-alert-box');
+  const lista = document.getElementById('conf-alert-lista');
+  lista.innerHTML = '';
+  if (estadoCaso.pontos_atencao && estadoCaso.pontos_atencao.length > 0) {
+    estadoCaso.pontos_atencao.forEach(p => {
+      const li = document.createElement('li');
+      li.textContent = p;
+      lista.appendChild(li);
+    });
+    alertBox.style.display = 'block';
+  } else {
+    alertBox.style.display = 'none';
+  }
+}
+
+// Formata o campo Valor como moeda brasileira enquanto a pessoa digita
+// (só dígitos -> "100.000,00") -- antes saia sem formatação nenhuma
+// (ex: "R$ 100000"), o que não bate com o padrão de escritura.
+function formatarCampoValor(input) {
+  let digitos = input.value.replace(/\D/g, '');
+  if (!digitos) { input.value = ''; return; }
+  digitos = digitos.replace(/^0+(?=\d)/, ''); // tira zeros à esquerda
+  while (digitos.length < 3) digitos = '0' + digitos; // garante ao menos 0,00
+  const centavos = digitos.slice(-2);
+  const inteiro = digitos.slice(0, -2);
+  const inteiroFormatado = inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  input.value = `${inteiroFormatado},${centavos}`;
+}
+
+function atualizarValorExtenso() {
+  formatarCampoValor(document.getElementById('conf-valor'));
+  const valor = document.getElementById('conf-valor').value;
+  const destino = document.getElementById('conf-valor-extenso');
+  if (!valor) { destino.textContent = ''; return; }
+  const form = new FormData();
+  form.append('valor', valor);
+  fetchAutenticado('/api/valor-por-extenso', { method: 'POST', body: form })
+    .then(r => r.json())
+    .then(d => { destino.textContent = d.extenso ? ('Por extenso: ' + d.extenso) : ''; })
+    .catch(() => {});
+}
+
+async function gerarMinutaFinal() {
+  const erroEl = document.getElementById('gerar-erro');
+  erroEl.style.display = 'none';
+
+  const pagoNoAto = document.getElementById('chave-pago-no-ato').classList.contains('ativo');
+
+  const outorgantesEditados = _lerCardsPessoasEditados(estadoCaso.outorgantes || [estadoCaso.outorgante], 'outorgante');
+  const outorgadosEditados = _lerCardsPessoasEditados(estadoCaso.outorgados || [estadoCaso.outorgado], 'outorgado');
+
+  // Onus vigente -- ja' vem PRONTO da extracao da matricula (imovel.onus_vigente,
+  // lista de textos curtos tipo 'Servidão de Passagem R-4'), entao a citacao
+  // no item 11a/7 e' derivada automaticamente daqui, em vez de depender de um
+  // campo manual solto que o usuario tinha que lembrar de preencher igual.
+  const imovelAtual = estadoCaso.imovel || {};
+  const onusVigenteBruto = imovelAtual.onus_vigente;
+  const onusLista = Array.isArray(onusVigenteBruto)
+    ? onusVigenteBruto
+    : (onusVigenteBruto && onusVigenteBruto !== 'nenhum' ? [onusVigenteBruto] : []);
+  const temOnusVigente = onusLista.length > 0;
+  const onusTextoResumido = onusLista.join('; ');
+
+  // Fracao vendida -- novo campo na tela de confirmacao (Totalidade /
+  // Fração ideal específica). So' quando NAO for a totalidade que entra a
+  // clausula de nucleo habitacional (Lei 6.766/79), como o usuario pediu.
+  const fracaoSelecionada = (document.getElementById('conf-fracao-vendida') || {}).value || 'totalidade';
+  const fracaoEspecifica = (document.getElementById('conf-fracao-especifica') || {}).value || '';
+  const ehFracaoParcial = fracaoSelecionada === 'fracao';
+  const fracaoVendidaTexto = ehFracaoParcial ? (fracaoEspecifica || '[FALTA: fracao_especifica]') : 'totalidade';
+
+  const contexto = {
+    outorgante: outorgantesEditados[0],
+    outorgado: outorgadosEditados[0],
+    // listas completas -- usadas por itens que usem a sintaxe nova de
+    // repeticao {{#outorgantes}}...{{/outorgantes}} pra listar quantas
+    // partes houver de cada lado (o singular acima continua existindo
+    // pra itens antigos que usam so' {{outorgante.nome}}, ou seja, so'
+    // leem a primeira parte)
+    outorgantes: outorgantesEditados,
+    outorgados: outorgadosEditados,
+    imovel: estadoCaso.imovel,
+    matricula: { data_expedicao: (estadoCaso.imovel && estadoCaso.imovel.data_emissao_certidao) || '' },
+    cartorio: { numero: '', cidade: '', uf_extenso: '' },
+    tabeliao: { nome: (sessaoUsuario && sessaoUsuario.nome_completo) || '', cargo: 'Tabeliã(o) de Notas' },
+    ordem_lavratura: document.getElementById('conf-ordem-lavratura').value,
+    data_lavratura: document.getElementById('conf-data-lavratura').value,
+    valor: (() => {
+      const v = document.getElementById('conf-valor').value.trim();
+      const extenso = document.getElementById('conf-valor-extenso').textContent.replace('Por extenso: ', '').trim();
+      if (!v) return '';
+      return extenso ? `R$ ${v} (${extenso})` : `R$ ${v}`;
+    })(),
+    forma_pagamento: pagoNoAto
+      ? await _montarFormaPagamentoParcelado(outorgantesEditados, outorgadosEditados)
+      : `anteriormente, em espécie — moeda corrente nacional deste país, conforme declarado pelas partes, pelo qual ${_nomesComConjugeOutorgante(outorgantesEditados) || 'O OUTORGANTE VENDEDOR'} ${_verboQuitacao(_nomesComConjugeOutorgante(outorgantesEditados))} plena, geral e irrevogável quitação`,
+    fracao_vendida: fracaoVendidaTexto,
+    onus: { descricao_resumida: onusTextoResumido || estadoCaso.onus_texto || 'ônus identificado' },
+    situacao_onus_imovel: temOnusVigente ? 'Positiva' : 'Negativa',
+    onus_citacao: temOnusVigente
+      ? `, à exceção de ${onusTextoResumido}, da qual a parte compradora tem pleno conhecimento, isentando esta Serventia de quaisquer responsabilidade presente ou futura`
+      : '',
+    parte_ideal_texto: ehFracaoParcial
+      ? ') que a copropriedade ora formada pela aquisição de parte ideal do imóvel objeto da presente não se destinará à formação de núcleo habitacional em desacordo com a Lei nº 6.766, de 19/12/1979, e Decreto-Lei nº 58, de 10/12/1937, bem como em desacordo com leis municipais, assumindo responsabilidade civil e criminal pela declaração, que fazem nos moldes do artigo 685 do Código de Normas do Foro Extrajudicial da Corregedoria-Geral da Justiça do Estado do Paraná.'
+      : '',
+    iptu: { certidao_numero: '', certidao_data: '', certidao_validade: '' },
+    lista_certidoes_faltantes: '',
+    // Conector do cônjuge que também outorga/anui, pro cabeçalho ("que faz:
+    // Fulano e sua mulher Fulana à Comprador") -- derivado automaticamente
+    // de conjuge_participante (ver Passo 2, seletor de participação do
+    // cônjuge), em vez de ficar sempre vazio esperando digitação manual.
+    conjuge_outorgante_texto: (() => {
+      const cp = outorgantesEditados[0] && outorgantesEditados[0].conjuge_participante;
+      if (!cp || !cp.dados || !cp.dados.nome) return '';
+      const generoFeminino = (cp.dados.estado_civil || '').trim().toLowerCase().endsWith('a');
+      const conector = generoFeminino ? 'sua mulher' : 'seu marido';
+      return ` e ${conector} ${cp.dados.nome}`;
+    })(),
+  };
+  const condicoes = {
+    // onus_existe agora e' derivado automaticamente do que a extracao da
+    // matricula ja' encontrou (imovel.onus_vigente) -- o toggle manual
+    // antigo (estadoCaso.onus_existe) so' entra como reforco, caso o
+    // usuario precise forcar a clausula mesmo sem onus detectado.
+    onus_existe: temOnusVigente || !!estadoCaso.onus_existe,
+    onus_dispensado: !!estadoCaso.onus_dispensado,
+    certidoes_dispensadas: false,
+    imovel_em_condominio: false,
+    outorgante_pf: outorgantesEditados[0]._tipo !== 'PJ',
+    outorgado_pj: outorgadosEditados[0]._tipo === 'PJ',
+    pago_no_ato: pagoNoAto,
+    // flags certidao_<tipo>_dispensada por parte (ex:
+    // 'outorgante_0_certidao_debitos_trabalhistas_dispensada') -- vieram
+    // prontas do backend na extracao, cada uma controla o sub-item
+    // correspondente no motor de minuta
+    ...(estadoCaso.condicoes_certidoes || {}),
+  };
+
+  const tipoAto = estadoCaso.tipoAto || 'compra_e_venda_a_vista';
+
+  const btn = document.getElementById('btn-gerar-minuta');
+  btn.disabled = true;
+
+  try {
+    // Motor unico: exige um .docx proprio (Configurações > Meu modelo de
+    // minuta) com o MESMO nome do tipo de ato escolhido. O motor antigo
+    // (itens cadastrados na Biblioteca de itens) foi desativado de
+    // proposito -- ter os dois rodando ao mesmo tempo era fonte de
+    // divergencia silenciosa (podia cair no motor errado sem ninguem
+    // perceber, se o nome do arquivo nao batesse por qualquer motivo).
+    let existeModeloProprio = false;
+    try {
+      const respLista = await fetchAutenticado('/api/modelos-docx/listar');
+      const listaModelos = await respLista.json();
+      existeModeloProprio = (listaModelos.modelos || []).includes(tipoAto);
+    } catch (e) {
+      erroEl.textContent = 'Não foi possível verificar os modelos cadastrados. Confira sua conexão e tente novamente.';
+      erroEl.style.display = 'block';
+      return;
+    }
+
+    if (!existeModeloProprio) {
+      erroEl.textContent = `Nenhum modelo .docx encontrado para "${tipoAto}". Suba o modelo em Configurações → Meu modelo de minuta antes de gerar.`;
+      erroEl.style.display = 'block';
+      return;
+    }
+
+    let resp;
+    let arquivoIdParaBaixar = null;
+
+    resp = await fetchAutenticado('/api/gerar-minuta-de-modelo-docx', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome_modelo: tipoAto, contexto, condicoes }),
+    });
+    if (!resp.ok) {
+      const dados = await resp.json();
+      erroEl.textContent = dados.detail || 'Erro ao gerar minuta.';
+      erroEl.style.display = 'block';
+      return;
+    }
+    const dados = await resp.json();
+    if (dados.alertas_criticos && dados.alertas_criticos.length > 0) {
+      const continuar = confirm(
+        'Atenção antes de baixar:\n\n' + dados.alertas_criticos.join('\n') +
+        '\n\nO texto já foi preenchido normalmente mesmo assim. Deseja continuar e baixar a minuta?'
+      );
+      if (!continuar) { return; }
+    }
+    arquivoIdParaBaixar = dados.arquivo_id;
+    resp = await fetchAutenticado(`/api/gerar-minuta-de-modelo-docx/download/${arquivoIdParaBaixar}`);
+
+    if (!resp.ok) {
+      let mensagem = 'Erro ao gerar minuta.';
+      try { mensagem = (await resp.json()).detail || mensagem; } catch (e) { /* resposta binaria, sem json */ }
+      erroEl.textContent = mensagem;
+      erroEl.style.display = 'block';
+      return;
+    }
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    document.getElementById('selo-download').onclick = () => {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'minuta_gerada.docx';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+    mostrarSelo();
+  } catch (e) {
+    erroEl.textContent = 'Não foi possível conectar ao servidor.';
+    erroEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// Data de hoje na Area de trabalho -- antes era texto fixo ("Quinta-feira,
+// 21 de agosto"), nunca atualizava.
+(() => {
+  const el = document.getElementById('dash-data-hoje');
+  if (el) {
+    const hoje = new Date();
+    let texto = hoje.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+    texto = texto.charAt(0).toUpperCase() + texto.slice(1); // "quinta-feira, 21 de agosto" -> "Quinta-feira, 21 de agosto"
+    el.textContent = texto;
+  }
+})();
+
+tentarRestaurarSessao();
+configurarUploads();
+
+async function carregarPerfil() {
+  try {
+    const resp = await fetchAutenticado('/api/perfil');
+    const p = await resp.json();
+    document.getElementById('perfil-cartorio-nome').value = p.cartorio_nome || '';
+    document.getElementById('perfil-tabeliao-nome').value = p.tabeliao_nome || '';
+    document.getElementById('perfil-tabeliao-cargo').value = p.tabeliao_cargo || '';
+    document.getElementById('perfil-cartorio-numero').value = p.cartorio_numero || '';
+    document.getElementById('perfil-cartorio-cidade').value = p.cartorio_cidade || '';
+    document.getElementById('perfil-cartorio-uf').value = p.cartorio_uf_extenso || '';
+    document.getElementById('perfil-comarca').value = p.comarca || '';
+    document.getElementById('perfil-cns').value = p.cns || '';
+  } catch (e) { /* tela de config pode nem estar montada ainda em algumas telas -- ignora silenciosamente */ }
+}
+
+// Preenche a tabela de Usuários (Configurações) com os logins reais do
+// banco -- antes disso existir, a tabela mostrava um exemplo fixo
+// ("João Silva") deixado do mockup visual original, nunca conectado a
+// dado nenhum.
+async function carregarUsuarios() {
+  const corpo = document.getElementById('tabela-usuarios-corpo');
+  if (!corpo) return;
+  try {
+    const resp = await fetchAutenticado('/api/usuarios');
+    const dados = await resp.json();
+    const usuarios = dados.usuarios || [];
+    const souAdmin = !!dados.sou_admin;
+
+    const formAdd = document.getElementById('form-add-usuario');
+    if (formAdd) formAdd.style.display = souAdmin ? 'block' : 'none';
+
+    if (usuarios.length === 0) {
+      corpo.innerHTML = '<tr><td colspan="4" class="sec">Nenhum usuário cadastrado.</td></tr>';
+      return;
+    }
+    corpo.innerHTML = usuarios.map(u => `
+      <tr>
+        <td>${escaparHtml(u.nome_completo || u.username)}</td>
+        <td class="sec">${u.is_admin ? ((sessaoUsuario && sessaoUsuario.username === u.username) ? 'Administrador (você)' : 'Administrador') : 'Usuário'}</td>
+        <td><span class="badge gerada">Ativo</span></td>
+        <td>${(souAdmin && !(sessaoUsuario && sessaoUsuario.username === u.username)) ? `<button class="btn-remover" onclick="removerUsuario('${escaparHtml(u.username)}')">× remover</button>` : ''}</td>
+      </tr>`).join('');
+  } catch (e) {
+    corpo.innerHTML = '<tr><td colspan="4" class="sec">Não foi possível carregar os usuários.</td></tr>';
+  }
+}
+
+async function criarUsuarioAdmin() {
+  const nome = document.getElementById('novo-usuario-nome').value.trim();
+  const login = document.getElementById('novo-usuario-login').value.trim();
+  const senha = document.getElementById('novo-usuario-senha').value;
+  const msg = document.getElementById('novo-usuario-msg');
+  msg.style.color = 'var(--texto-sec)';
+
+  if (!login || !senha) {
+    msg.textContent = 'Preencha ao menos login e senha.';
+    msg.style.color = '#f87171';
+    return;
+  }
+
+  try {
+    const form = new URLSearchParams();
+    form.set('nome', nome);
+    form.set('username', login);
+    form.set('senha', senha);
+    const resp = await fetchAutenticado('/api/usuarios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: form,
+    });
+    const dados = await resp.json();
+    if (!resp.ok) {
+      msg.textContent = dados.detail || 'Não foi possível criar o usuário.';
+      msg.style.color = '#f87171';
+      return;
+    }
+    msg.textContent = `Login "${login}" criado com sucesso.`;
+    msg.style.color = '#4ade80';
+    document.getElementById('novo-usuario-nome').value = '';
+    document.getElementById('novo-usuario-login').value = '';
+    document.getElementById('novo-usuario-senha').value = '';
+    await carregarUsuarios();
+  } catch (e) {
+    msg.textContent = 'Não foi possível conectar ao servidor.';
+    msg.style.color = '#f87171';
+  }
+}
+
+async function removerUsuario(username) {
+  if (!confirm(`Remover o acesso de "${username}"? Essa ação não pode ser desfeita.`)) return;
+  try {
+    const resp = await fetchAutenticado(`/api/usuarios/${encodeURIComponent(username)}`, { method: 'DELETE' });
+    if (!resp.ok) {
+      const erro = await resp.json();
+      alert(erro.detail || 'Não foi possível remover o usuário.');
+      return;
+    }
+    await carregarUsuarios();
+  } catch (e) {
+    alert('Não foi possível conectar ao servidor.');
+  }
+}
+
+
+
+function escaparHtml(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto == null ? '' : String(texto);
+  return div.innerHTML;
+}
+
+async function atualizarCartorioNaSidebar() {
+  try {
+    const resp = await fetchAutenticado('/api/perfil');
+    const p = await resp.json();
+    const nomeExibicao = p.cartorio_nome || (sessaoUsuario && sessaoUsuario.cartorio) || '';
+    document.querySelectorAll('.user-box .cartorio-usuario').forEach(el => {
+      el.textContent = nomeExibicao;
+    });
+  } catch (e) { /* se a API de perfil falhar, mantem o que ja tinha vindo do login */ }
+}
+
+async function salvarPerfil() {
+  const payload = {
+    cartorio_nome: document.getElementById('perfil-cartorio-nome').value,
+    tabeliao_nome: document.getElementById('perfil-tabeliao-nome').value,
+    tabeliao_cargo: document.getElementById('perfil-tabeliao-cargo').value,
+    cartorio_numero: document.getElementById('perfil-cartorio-numero').value,
+    cartorio_cidade: document.getElementById('perfil-cartorio-cidade').value,
+    cartorio_uf_extenso: document.getElementById('perfil-cartorio-uf').value,
+    comarca: document.getElementById('perfil-comarca').value,
+    cns: document.getElementById('perfil-cns').value,
+  };
+  const msgEl = document.getElementById('perfil-msg');
+  try {
+    const resp = await fetchAutenticado('/api/perfil', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (resp.ok) {
+      msgEl.style.color = 'var(--verde-sinal)';
+      msgEl.textContent = 'Perfil salvo — já vale pra próxima minuta gerada.';
+      atualizarCartorioNaSidebar();
+    } else {
+      msgEl.style.color = '#DC5B5B';
+      msgEl.textContent = 'Erro ao salvar perfil.';
+    }
+  } catch (e) {
+    msgEl.style.color = '#DC5B5B';
+    msgEl.textContent = 'Não foi possível conectar ao servidor.';
+  }
+}
+let modeloAtual = null; // cache do modelo carregado (itens + ordem) pra edicao local
+
+async function carregarListaModelos() {
+  try {
+    const resp = await fetchAutenticado('/api/modelos');
+    modelosDisponiveis = await resp.json();
+    const opcoesHtml = Object.entries(modelosDisponiveis)
+      .map(([id, nome]) => `<option value="${id}">${nome}</option>`).join('');
+    document.getElementById('select-modelo-biblioteca').innerHTML = opcoesHtml;
+    document.getElementById('select-modelo-composicao').innerHTML = opcoesHtml;
+    if (Object.keys(modelosDisponiveis).length > 0) {
+      carregarBiblioteca();
+      carregarComposicao();
+    }
+  } catch (e) {
+    document.getElementById('modelos-msg').textContent = 'Não foi possível carregar os modelos.';
+  }
+}
+
+async function carregarBiblioteca() {
+  const tipoAto = document.getElementById('select-modelo-biblioteca').value;
+  if (!tipoAto) return;
+  const msgEl = document.getElementById('modelos-msg');
+  try {
+    const resp = await fetchAutenticado('/api/modelos/' + tipoAto);
+    if (!resp.ok) throw new Error('resposta ' + resp.status);
+    modeloAtual = await resp.json();
+  } catch (e) {
+    msgEl.style.color = '#DC5B5B';
+    msgEl.textContent = 'Não foi possível carregar os itens — confira se o servidor está acordado (pode levar até 1 minuto após ficar sem uso) e tente de novo.';
+    return;
+  }
+
+  const lista = document.getElementById('lista-biblioteca-itens');
+  lista.innerHTML = '';
+  fecharEditorItem();
+
+  modeloAtual.ordem.forEach(itemId => {
+    const item = modeloAtual.itens[itemId];
+    const slot = document.createElement('div');
+    slot.className = 'dossie-slot preenchido';
+    const nVariantes = (item.variantes || []).length;
+    slot.innerHTML = `
+      <div class="icon">✓</div>
+      <div class="info"><div class="tab">${item.nome}</div><div class="hint">${nVariantes} variante(s)${item.pendente ? ' · pendente' : ''}</div></div>
+      <div class="acao" style="cursor:pointer;">editar</div>
+    `;
+    slot.querySelector('.acao').onclick = () => abrirEditorItem(tipoAto, itemId);
+    lista.appendChild(slot);
+  });
+
+  if (modeloAtual.ordem.length === 0) {
+    lista.innerHTML = '<p class="micro-nota">Nenhum item cadastrado ainda neste modelo.</p>';
+  }
+}
+
+function garantirEditor() {
+  let editor = document.getElementById('editor-item');
+  if (editor) return editor;
+
+  editor = document.createElement('div');
+  editor.className = 'item-editor';
+  editor.id = 'editor-item';
+  editor.style.display = 'none';
+  editor.innerHTML = `
+    <label>ID do item (identificador interno, sem espaço)</label>
+    <input type="text" id="editor-item-id" class="mono" style="width:100%; padding:8px 10px; border:1px solid #D9D7D0; border-radius:5px; background:#FFFFFF; color:var(--bruma); margin-bottom:12px;">
+    <label>Nome do item</label>
+    <input type="text" id="editor-item-nome" style="width:100%; padding:8px 10px; border:1px solid #D9D7D0; border-radius:5px; background:#FFFFFF; color:var(--bruma); margin-bottom:12px;">
+    <label>Texto padrão</label>
+    <textarea id="editor-item-texto" rows="5"></textarea>
+    <div class="variante-lista" id="editor-variantes"></div>
+    <button class="btn-add" style="margin-top:10px;" onclick="adicionarVarianteEditor()">+ Adicionar variante</button>
+    <div style="display:flex; gap:8px; margin-top:16px;">
+      <button class="btn-primary" onclick="salvarItemEditor()">Salvar item</button>
+      <button class="btn-remover" onclick="removerItemEditor()">× Remover item</button>
+      <button class="btn-link" onclick="fecharEditorItem()">Cancelar</button>
+    </div>
+  `;
+  document.getElementById('lista-biblioteca-itens').after(editor);
+  return editor;
+}
+
+const ACOES_VARIANTE = [
+  ['substitui', 'substitui o texto padrão inteiro'],
+  ['adiciona_ao_final', 'adiciona ao final do texto'],
+  ['adiciona_letra_extra', 'adiciona como letra/parágrafo novo'],
+  ['adiciona_inline', 'emenda na mesma frase'],
+  ['adiciona_ao_final_da_letra_a', 'emenda no final da letra a)'],
+  ['inclui_letra_b', 'emenda no final da letra b)'],
+];
+
+function linhaVariante(v) {
+  v = v || { id: '', condicao: '', acao: 'adiciona_letra_extra', texto: '' };
+  const div = document.createElement('div');
+  div.className = 'variante';
+  const opcoesAcao = ACOES_VARIANTE.map(([val, label]) =>
+    `<option value="${val}" ${v.acao === val ? 'selected' : ''}>${label}</option>`).join('');
+  div.innerHTML = `
+    <div class="variante-head">
+      <input type="text" class="mono v-id" placeholder="id (ex: outorgado_pj)" value="${v.id}" style="width:180px; padding:4px 8px; background:#FFFFFF; border:1px solid #D9D7D0; border-radius:4px; color:var(--azul-onda); font-size:12.5px;">
+      <select class="v-acao" style="padding:4px 8px; background:#FFFFFF; border:1px solid #D9D7D0; border-radius:4px; color:var(--texto-sec); font-size:12px;">${opcoesAcao}</select>
+      <button class="btn-remover" onclick="this.closest('.variante').remove()">× remover</button>
+    </div>
+    <input type="text" class="v-condicao" placeholder="descrição da condição (ex: SE Pessoa Jurídica)" value="${v.condicao}" style="width:100%; padding:6px 10px; margin-bottom:6px; background:#FFFFFF; border:1px solid #D9D7D0; border-radius:5px; color:var(--bruma); font-size:12.5px;">
+    <textarea class="v-texto" rows="2">${v.texto}</textarea>
+  `;
+  return div;
+}
+
+function adicionarVarianteEditor() {
+  document.getElementById('editor-variantes').appendChild(linhaVariante());
+}
+
+let editorContexto = { tipoAto: null, itemId: null, novo: false };
+
+function abrirEditorItem(tipoAto, itemId) {
+  const editor = garantirEditor();
+  const item = modeloAtual.itens[itemId];
+  editorContexto = { tipoAto, itemId, novo: false };
+
+  document.getElementById('editor-item-id').value = itemId;
+  document.getElementById('editor-item-id').disabled = true;
+  document.getElementById('editor-item-nome').value = item.nome;
+  document.getElementById('editor-item-texto').value = item.texto_padrao;
+
+  const variantesEl = document.getElementById('editor-variantes');
+  variantesEl.innerHTML = '';
+  (item.variantes || []).forEach(v => variantesEl.appendChild(linhaVariante(v)));
+
+  editor.style.display = 'block';
+  editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function abrirNovoItem() {
+  const tipoAto = document.getElementById('select-modelo-biblioteca').value;
+  if (!tipoAto) { alert('Escolha um tipo de ato primeiro.'); return; }
+  const editor = garantirEditor();
+  editorContexto = { tipoAto, itemId: null, novo: true };
+
+  document.getElementById('editor-item-id').value = '';
+  document.getElementById('editor-item-id').disabled = false;
+  document.getElementById('editor-item-nome').value = '';
+  document.getElementById('editor-item-texto').value = '';
+  document.getElementById('editor-variantes').innerHTML = '';
+
+  editor.style.display = 'block';
+  editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function fecharEditorItem() {
+  const editor = document.getElementById('editor-item');
+  if (editor) editor.style.display = 'none';
+}
+
+async function salvarItemEditor() {
+  const itemId = document.getElementById('editor-item-id').value.trim();
+  const nome = document.getElementById('editor-item-nome').value.trim();
+  const texto = document.getElementById('editor-item-texto').value;
+
+  if (!itemId || !nome) {
+    alert('Preencha o ID e o nome do item.');
+    return;
+  }
+
+  const variantes = [...document.querySelectorAll('#editor-variantes .variante')].map(div => ({
+    id: div.querySelector('.v-id').value.trim(),
+    acao: div.querySelector('.v-acao').value,
+    condicao: div.querySelector('.v-condicao').value.trim(),
+    texto: div.querySelector('.v-texto').value,
+  }));
+
+  const payload = { nome, texto_padrao: texto, variantes };
+
+  const btnSalvar = document.querySelector('#editor-item .btn-primary');
+  const textoOriginalBtn = btnSalvar ? btnSalvar.textContent : '';
+  if (btnSalvar) {
+    btnSalvar.disabled = true;
+    btnSalvar.textContent = 'Salvando... (pode levar até 1 min se o servidor estava inativo)';
+  }
+
+  try {
+    const resp = await fetchAutenticado(`/api/modelos/${editorContexto.tipoAto}/itens/${itemId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (resp.ok) {
+      fecharEditorItem();
+      carregarBiblioteca();
+      carregarComposicao();
+    } else {
+      const dados = await resp.json();
+      alert('Erro ao salvar: ' + (dados.detail || 'erro desconhecido'));
+    }
+  } catch (e) {
+    alert('Não foi possível conectar ao servidor. Confira sua conexão (ou se o servidor está acordado) e tente de novo.');
+  } finally {
+    if (btnSalvar) {
+      btnSalvar.disabled = false;
+      btnSalvar.textContent = textoOriginalBtn;
+    }
+  }
+}
+
+async function removerItemEditor() {
+  if (!confirm('Remover este item da biblioteca e da composição deste modelo?')) return;
+  try {
+    const resp = await fetchAutenticado(`/api/modelos/${editorContexto.tipoAto}/itens/${editorContexto.itemId}`, { method: 'DELETE' });
+    if (resp.ok) {
+      fecharEditorItem();
+      carregarBiblioteca();
+      carregarComposicao();
+    } else {
+      alert('Erro ao remover item.');
+    }
+  } catch (e) {
+    alert('Não foi possível conectar ao servidor.');
+  }
+}
+
+async function carregarComposicao() {
+  const tipoAto = document.getElementById('select-modelo-composicao').value;
+  if (!tipoAto) return;
+  const lista = document.getElementById('lista-composicao');
+  let modelo;
+  try {
+    const resp = await fetchAutenticado('/api/modelos/' + tipoAto);
+    if (!resp.ok) throw new Error('resposta ' + resp.status);
+    modelo = await resp.json();
+  } catch (e) {
+    lista.innerHTML = '<p class="micro-nota" style="color:#DC5B5B;">Não foi possível carregar a composição — confira se o servidor está acordado e tente de novo.</p>';
+    return;
+  }
+
+  lista.innerHTML = '';
+
+  modelo.ordem.forEach((itemId, i) => {
+    const item = modelo.itens[itemId];
+    const div = document.createElement('div');
+    div.className = 'composicao-item' + (item.pendente ? ' pendente' : '');
+    div.innerHTML = `
+      <span class="handle">⠿</span> ${item.nome}
+      ${item.pendente ? '<span class="chip-pendente">pendente</span>' : ''}
+      <button class="btn-link" style="margin-left:auto;" onclick="moverItemComposicao('${tipoAto}', ${i}, -1)">↑</button>
+      <button class="btn-link" onclick="moverItemComposicao('${tipoAto}', ${i}, 1)">↓</button>
+    `;
+    lista.appendChild(div);
+  });
+
+  if (modelo.ordem.length === 0) {
+    lista.innerHTML = '<p class="micro-nota">Nenhum item na composição ainda — cadastre itens na Biblioteca primeiro.</p>';
+  }
+}
+
+async function moverItemComposicao(tipoAto, indice, direcao) {
+  try {
+    const resp = await fetchAutenticado('/api/modelos/' + tipoAto);
+    if (!resp.ok) throw new Error('resposta ' + resp.status);
+    const modelo = await resp.json();
+    const nova = [...modelo.ordem];
+    const alvo = indice + direcao;
+    if (alvo < 0 || alvo >= nova.length) return;
+    [nova[indice], nova[alvo]] = [nova[alvo], nova[indice]];
+
+    const respSalvar = await fetchAutenticado(`/api/modelos/${tipoAto}/ordem`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ordem: nova }),
+    });
+    if (!respSalvar.ok) throw new Error('falha ao salvar ordem');
+    carregarComposicao();
+  } catch (e) {
+    alert('Não foi possível reordenar — confira sua conexão e tente de novo.');
+  }
+}
+
+async function criarNovoModelo() {
+  const nomeEl = document.getElementById('novo-modelo-nome');
+  const nome = nomeEl.value.trim();
+  const msgEl = document.getElementById('modelos-msg');
+  if (!nome) { msgEl.style.color = '#DC5B5B'; msgEl.textContent = 'Digite um nome pro novo tipo de ato.'; return; }
+
+  const tipoAto = nome.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acento
+    .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+
+  try {
+    const resp = await fetchAutenticado('/api/modelos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo_ato: tipoAto, nome }),
+    });
+    const dados = await resp.json();
+    if (resp.ok) {
+      msgEl.style.color = 'var(--verde-sinal)';
+      msgEl.textContent = `Modelo "${nome}" criado. Selecione ele acima e adicione os itens.`;
+      nomeEl.value = '';
+      await carregarListaModelos();
+      document.getElementById('select-modelo-biblioteca').value = tipoAto;
+      carregarBiblioteca();
+    } else {
+      msgEl.style.color = '#DC5B5B';
+      msgEl.textContent = dados.detail || 'Erro ao criar modelo.';
+    }
+  } catch (e) {
+    msgEl.style.color = '#DC5B5B';
+    msgEl.textContent = 'Não foi possível conectar ao servidor — confira se ele está acordado e tente de novo.';
+  }
+}
+
+
+// ---------------------------------------------------------------------------
+// MEU MODELO DE MINUTA (.DOCX PRÓPRIO) -- fluxo alternativo a biblioteca
+// de itens: sobe um .docx com tags «» proprias, sem precisar cadastrar
+// item nenhum. Ver scripts/minuta_docx_resolver.py no backend.
+// ---------------------------------------------------------------------------
+function atualizarNomeArquivoModeloDocx() {
+  const input = document.getElementById('novo-modelo-docx-arquivo');
+  const span = document.getElementById('novo-modelo-docx-arquivo-nome');
+  span.textContent = input.files.length > 0 ? input.files[0].name : '';
+}
+
+async function carregarModelosDocx() {
+  const container = document.getElementById('lista-modelos-docx');
+  try {
+    const resp = await fetchAutenticado('/api/modelos-docx/listar');
+    const dados = await resp.json();
+    if (!dados.modelos || dados.modelos.length === 0) {
+      container.innerHTML = '<p class="micro-nota">Nenhum modelo .docx enviado ainda.</p>';
+      return;
+    }
+    container.innerHTML = dados.modelos.map(nome => `
+      <div class="dossie-slot preenchido" style="margin-bottom:6px;">
+        <div class="icon">✓</div>
+        <div class="info"><div class="tab">${nome}</div><div class="hint">pronto pra usar</div></div>
+      </div>
+    `).join('');
+  } catch (e) {
+    container.innerHTML = '<p class="micro-nota">Não foi possível carregar a lista de modelos.</p>';
+  }
+}
+
+async function enviarModeloDocx() {
+  const nomeEl = document.getElementById('novo-modelo-docx-nome');
+  const arquivoEl = document.getElementById('novo-modelo-docx-arquivo');
+  const msgEl = document.getElementById('modelos-docx-msg');
+
+  const nome = nomeEl.value.trim();
+  if (!nome) { msgEl.style.color = '#DC5B5B'; msgEl.textContent = 'Digite um nome pro modelo.'; return; }
+  if (arquivoEl.files.length === 0) { msgEl.style.color = '#DC5B5B'; msgEl.textContent = 'Escolha um arquivo .docx.'; return; }
+
+  const form = new FormData();
+  form.append('nome', nome);
+  form.append('arquivo', arquivoEl.files[0]);
+
+  msgEl.style.color = 'var(--texto-sec)';
+  msgEl.textContent = 'Enviando...';
+
+  try {
+    const resp = await fetchAutenticado('/api/modelos-docx/upload', { method: 'POST', body: form });
+    const dados = await resp.json();
+    if (resp.ok) {
+      msgEl.style.color = 'var(--verde-sinal)';
+      msgEl.textContent = `Modelo "${dados.nome}" enviado com sucesso.`;
+      nomeEl.value = '';
+      arquivoEl.value = '';
+      document.getElementById('novo-modelo-docx-arquivo-nome').textContent = '';
+      carregarModelosDocx();
+    } else {
+      msgEl.style.color = '#DC5B5B';
+      msgEl.textContent = dados.detail || 'Erro ao enviar modelo.';
+    }
+  } catch (e) {
+    msgEl.style.color = '#DC5B5B';
+    msgEl.textContent = 'Não foi possível conectar ao servidor.';
+  }
+}
+
+
+
+function formatarOnus(onus) {
+  if (!onus || onus === 'nenhum') return null;
+  if (typeof onus === 'string') return onus;
+  if (Array.isArray(onus)) {
+    return onus.map(item => {
+      if (typeof item === 'string') return item;
+      if (item && typeof item === 'object') {
+        return Object.values(item).filter(Boolean).join(' - ');
+      }
+      return String(item);
+    }).join('; ');
+  }
+  if (typeof onus === 'object') {
+    return Object.values(onus).filter(Boolean).join(' - ');
+  }
+  return String(onus);
+}
+
+async function analisarMatricula() {
+  const erroEl = document.getElementById('analista-erro');
+  erroEl.style.display = 'none';
+
+  if (!documentos['analista-matricula']) {
+    erroEl.textContent = 'Envie a certidão de matrícula antes de analisar.';
+    erroEl.style.display = 'block';
+    return;
+  }
+
+  const form = new FormData();
+  form.append('arquivo', documentos['analista-matricula']);
+
+  const btn = document.getElementById('btn-analisar-matricula');
+  const textoOriginal = btn.textContent;
+  btn.textContent = 'Lendo registros e averbações...';
+  btn.disabled = true;
+
+  // Timeout do lado do navegador -- espelha o timeout de matricula do
+  // backend (120s) com folga, pra nunca ficar esperando pra sempre.
+  const controlador = new AbortController();
+  const idTimeoutCliente = setTimeout(() => controlador.abort(), 140000);
+
+  try {
+    const resp = await fetchAutenticado('/api/analisar-matricula', {
+      method: 'POST', body: form, signal: controlador.signal,
+    });
+    const dados = await resp.json();
+    if (resp.ok) {
+      renderizarRelatorioMatricula(dados.resultado, dados.meta);
+      document.getElementById('analista-resultado').style.display = 'block';
+    } else {
+      erroEl.textContent = dados.detail || 'Erro ao analisar matrícula.';
+      erroEl.style.display = 'block';
+    }
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      erroEl.textContent = 'O servidor demorou demais pra responder (mais de 2 minutos). Tente novamente.';
+    } else {
+      erroEl.textContent = 'Não foi possível conectar ao servidor.';
+    }
+    erroEl.style.display = 'block';
+  } finally {
+    clearTimeout(idTimeoutCliente);
+    btn.textContent = textoOriginal;
+    btn.disabled = false;
+  }
+}
+
+function _formatarDataHora(isoString) {
+  try {
+    const d = new Date(isoString);
+    return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  } catch (e) { return isoString; }
+}
+
+function _listaOuVazio(valor) {
+  if (!valor || valor === 'nenhum') return [];
+  return Array.isArray(valor) ? valor : [valor];
+}
+
+// Monta e injeta o relatorio completo de analise de matricula -- visual
+// com a identidade do Copiloto Notarial (nao do cartorio, ja' que e'
+// multi-cartorio), com botao de impressao (que tambem serve pra "Salvar
+// como PDF", nativo de qualquer navegador).
+function renderizarRelatorioMatricula(r, meta) {
+  const onusLista = _listaOuVazio(r.onus_vigente || r.onus);
+  const temOnus = onusLista.length > 0;
+
+  const alertasInternos = _listaOuVazio(r.alertas_internos_matricula);
+  const sugestoesConjuge = _listaOuVazio(r.sugestao_participacao_conjuge);
+  const historico = Array.isArray(r.historico_registros) ? r.historico_registros : [];
+
+  const validade = meta && meta.certidao_validade;
+  const desatualizada = meta && meta.matricula_desatualizada;
+
+  const escapar = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  let html = '';
+
+  html += `<svg class="rel-logo-print" width="30" height="46" viewBox="0 0 60 92" fill="none" style="display:none;">
+    <rect x="8" y="4" width="44" height="84" rx="7" fill="#102A43"/>
+    <polygon points="38,4 52,4 52,18" fill="#B69A62"/>
+    <rect x="20" y="34" width="8" height="38" fill="#F5F2EA"/>
+    <rect x="36" y="34" width="8" height="38" fill="#F5F2EA"/>
+    <polygon points="20,34 28,34 44,72 36,72" fill="#F5F2EA"/>
+  </svg>`;
+
+  html += `<div class="rel-cabecalho">
+    <div>
+      <div class="rel-marca">Copiloto Notarial</div>
+      <div class="rel-titulo">Relatório de Análise de Matrícula</div>
+      <div class="rel-meta">Analisado em ${escapar(_formatarDataHora(meta.analisado_em))} · por ${escapar(meta.analisado_por || '—')}</div>
+    </div>
+    <button class="btn-imprimir-relatorio" onclick="window.print()">Imprimir / Salvar PDF</button>
+  </div>`;
+
+  html += `<div class="rel-card">
+    <h3>Identificação</h3>
+    <div class="rel-grid2">
+      <div><div class="rel-label">Matrícula</div><div class="rel-valor">${escapar(r.matricula || '—')}</div></div>
+      <div><div class="rel-label">Circunscrição</div><div class="rel-valor">${escapar(r.circunscricao || '—')}</div></div>
+      <div><div class="rel-label">Comarca</div><div class="rel-valor">${escapar(r.comarca || '—')}</div></div>
+      <div><div class="rel-label">Ofício de Registro</div><div class="rel-valor">${escapar(r.oficio_registro || '—')}</div></div>
+    </div>
+  </div>`;
+
+  html += `<div class="rel-card">
+    <h3>Proprietário(s) atual(is)</h3>
+    <div class="rel-valor">${escapar(r.proprietario_atual || 'não identificado')}</div>
+    <div class="rel-grid2">
+      <div><div class="rel-label">CPF/CNPJ</div><div class="rel-valor">${escapar(formatarOnus(r.proprietarios_atuais_documento) || '—')}</div></div>
+      <div><div class="rel-label">Estado civil</div><div class="rel-valor">${escapar(formatarOnus(r.proprietarios_atuais_estado_civil) || '—')}</div></div>
+    </div>
+    ${r.proprietarios_atuais_percentual ? `<div class="rel-label">Percentual de cada um</div><div class="rel-valor">${escapar(formatarOnus(r.proprietarios_atuais_percentual))}</div>` : ''}
+    ${sugestoesConjuge.map(s => `<div class="rel-alerta">${escapar(s)}</div>`).join('')}
+  </div>`;
+
+  html += `<div class="rel-card">
+    <h3>Descrição do imóvel</h3>
+    <div class="rel-valor" style="margin-bottom:0;">${escapar(r.descricao || '—')}</div>
+    ${r.descricao_ajustada_de_futuro_para_presente === 'sim' ? '<p class="micro-nota" style="margin-top:8px;">Descrição ajustada de futuro → presente (averbação de conclusão de obra identificada).</p>' : ''}
+  </div>`;
+
+  html += `<div class="rel-card">
+    <h3>Ônus e restrições vigentes</h3>
+    ${temOnus
+      ? `<span class="rel-badge-critico">${onusLista.length} ${onusLista.length === 1 ? 'restrição vigente encontrada' : 'restrições vigentes encontradas'}</span>` +
+        onusLista.map(o => {
+          const partes = String(o).split(' -- ');
+          return `<div class="rel-item-onus">• ${escapar(partes[0])}${partes[1] ? ` <span class="rel-impl">— ${escapar(partes[1])}</span>` : ''}</div>`;
+        }).join('')
+      : '<span class="rel-badge-ok">Nenhum ônus vigente identificado</span>'}
+  </div>`;
+
+  if (alertasInternos.length > 0 || desatualizada) {
+    html += `<div class="rel-card">
+      <h3>Alertas</h3>
+      ${alertasInternos.map(a => `<div class="rel-alerta">${escapar(a)}</div>`).join('')}
+      ${desatualizada ? `<div class="rel-alerta">Última alteração relevante há ${Math.round(meta.dias_desde_ultima_alteracao / 365)} anos (${escapar(r.data_ultima_alteracao_relevante)}) — confirme se o estado civil dos proprietários ainda é o mesmo.</div>` : ''}
+    </div>`;
+  }
+
+  if (historico.length > 0) {
+    html += `<div class="rel-card">
+      <h3>Linha do tempo de registros e averbações</h3>
+      <div class="rel-timeline">
+        ${historico.map(h => `<div class="rel-tl-item">
+          <div class="rel-tl-tipo">${escapar(h.tipo)} <span class="rel-tl-data">· ${escapar(h.data || '')}</span></div>
+          <div class="rel-tl-desc">${escapar(h.resumo || '')}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (validade) {
+    html += `<div class="rel-card">
+      <h3>Validade da certidão</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="rel-valor" style="margin:0;">Emitida em ${escapar(validade.data_emissao)} (há ${validade.dias_passados} dias)</span>
+        ${validade.dentro_do_prazo
+          ? '<span class="rel-badge-ok">Válida (dentro dos 30 dias)</span>'
+          : '<span class="rel-badge-critico">Vencida (mais de 30 dias)</span>'}
+      </div>
+    </div>`;
+  }
+
+  html += `<div class="rel-rodape">Copiloto Notarial · Análise assistida por IA — sempre confira os dados antes de usar em ato notarial.</div>`;
+
+  document.getElementById('analista-resultado').innerHTML = html;
+}
+
+</script>
+
+</body>
+</html>
